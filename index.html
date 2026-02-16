@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="sl">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DIZAIN | Innovation Meets Architecture</title>
+    <title>DIZAIN | Arhitektura Digitalnega</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,9 +17,9 @@
               display: ['Syncopate', 'sans-serif'],
             },
             colors: {
-              'concrete-900': '#0a0a0a',
-              'concrete-800': '#121212',
-              'concrete-700': '#1c1c1c',
+              'concrete-900': '#050505',
+              'concrete-800': '#0a0a0a',
+              'concrete-700': '#141414',
               'concrete-100': '#f0f0f0',
             },
             backgroundImage: {
@@ -30,12 +30,27 @@
       }
     </script>
     <style>
-      /* Custom Scrollbar for Webkit */
+      /* Ensure native scrolling works flawlessly */
+      html, body {
+        width: 100%;
+        min-height: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: #050505;
+        color: #ffffff;
+        cursor: default;
+        overflow-x: hidden;
+        overflow-y: auto;
+        scroll-behavior: smooth;
+      }
+
+      /* Custom Scrollbar */
       ::-webkit-scrollbar {
         width: 8px;
+        height: 8px;
       }
       ::-webkit-scrollbar-track {
-        background: #0a0a0a;
+        background: #050505;
       }
       ::-webkit-scrollbar-thumb {
         background: #333;
@@ -44,13 +59,7 @@
       ::-webkit-scrollbar-thumb:hover {
         background: #555;
       }
-      
-      body {
-        background-color: #0a0a0a;
-        color: #ffffff;
-        cursor: default;
-      }
-      
+
       .text-outline {
         -webkit-text-stroke: 1px rgba(255, 255, 255, 0.2);
         color: transparent;
@@ -59,11 +68,16 @@
   <script type="importmap">
 {
   "imports": {
-    "lucide-react": "https://esm.sh/lucide-react@^0.564.0",
-    "recharts": "https://esm.sh/recharts@^3.7.0",
-    "framer-motion": "https://esm.sh/framer-motion@^12.34.0",
+    "lucide-react": "https://esm.sh/lucide-react@0.292.0?external=react,react-dom",
+    "recharts": "https://esm.sh/recharts@2.12.7?external=react,react-dom",
+    "framer-motion": "https://esm.sh/framer-motion@11.0.8?external=react,react-dom",
+    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+    "react-dom": "https://esm.sh/react-dom@18.2.0",
+    "react": "https://esm.sh/react@18.2.0",
+    "react/jsx-runtime": "https://esm.sh/react@18.2.0/jsx-runtime",
+    "gsap": "https://esm.sh/gsap@3.12.5",
+    "gsap/ScrollTrigger": "https://esm.sh/gsap@3.12.5/ScrollTrigger",
     "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "react": "https://esm.sh/react@^19.2.4",
     "react/": "https://esm.sh/react@^19.2.4/"
   }
 }

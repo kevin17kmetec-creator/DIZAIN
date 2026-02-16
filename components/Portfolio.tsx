@@ -1,13 +1,7 @@
 
-import React, { useRef, useState } from 'react';
-import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
-
-interface ProjectDetail {
-  label: string;
-  value: string;
-  x: number;
-  y: number;
-}
+import React, { useRef } from 'react';
+import { useLanguage } from '../contexts/LanguageContext';
+import { motion, useScroll, useTransform, MotionValue } from 'framer-motion';
 
 interface Project {
   id: number;
@@ -15,176 +9,134 @@ interface Project {
   category: string;
   image: string;
   description: string;
-  details: ProjectDetail[];
+  specs: string[];
 }
 
 const projects: Project[] = [
   {
     id: 1,
     title: "Nourish",
-    category: "3D Product Experience",
+    category: "3D E-Commerce",
     image: "https://picsum.photos/800/600?random=1",
-    description: "Interactive 3D skincare showcase utilizing WebGL.",
-    details: [
-      { label: "Tech", value: "Three.js", x: 20, y: 20 },
-      { label: "Performance", value: "60 FPS", x: 70, y: 15 },
-      { label: "Interaction", value: "WebGL", x: 80, y: 80 },
-    ]
+    description: "WebGL powered skincare experience.",
+    specs: ["Three.js", "React", "GSAP"]
   },
   {
     id: 2,
     title: "Vortex",
-    category: "FinTech App",
+    category: "FinTech",
     image: "https://picsum.photos/800/600?random=2",
-    description: "Secure, motion-driven banking interface.",
-    details: [
-      { label: "Security", value: "AES-256", x: 10, y: 80 },
-      { label: "Speed", value: "<100ms", x: 85, y: 30 },
-    ]
+    description: "Next-gen banking interface.",
+    specs: ["Security", "Real-time", "App"]
   },
   {
     id: 3,
     title: "Aeon",
     category: "Architecture",
     image: "https://picsum.photos/800/600?random=3",
-    description: "Minimalist portfolio for sustainable firm.",
-    details: [
-      { label: "CMS", value: "Sanity", x: 15, y: 15 },
-      { label: "Design", value: "Minimal", x: 75, y: 75 },
-    ]
+    description: "Minimalist portfolio platform.",
+    specs: ["Minimal", "Gallery", "CMS"]
+  },
+  {
+    id: 4,
+    title: "Zenith",
+    category: "Automotive",
+    image: "https://picsum.photos/800/600?random=4",
+    description: "Electric vehicle configurator.",
+    specs: ["3D", "Configurator", "Vue"]
   }
 ];
 
-const PortfolioCard: React.FC<{ project: Project; index: number }> = ({ project, index }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
-
-  // Parallax effect for image
+const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, index }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  
+  // Trigger animation as soon as element enters viewport
   const { scrollYProgress } = useScroll({
-    target: cardRef,
-    offset: ["start end", "end start"]
+    target: ref,
+    offset: ["start end", "center center"] 
   });
-  const y = useTransform(scrollYProgress, [0, 1], [-50, 50]);
+
+  const isEven = index % 2 === 0;
+  
+  // Reduced range to 200px so images don't start too far off-screen
+  const x = useTransform(scrollYProgress, [0, 1], [isEven ? -200 : 200, 0]);
+  
+  // Immediate opacity fade in (0 to 100% in first 20% of scroll)
+  const opacity = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
 
   return (
-    <motion.div
-      ref={cardRef}
-      initial={{ opacity: 0, y: 100 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, delay: index * 0.1 }}
-      viewport={{ once: true, margin: "-10%" }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className="group relative w-full md:w-[48%] lg:w-[32%] aspect-[4/5] flex-shrink-0 cursor-pointer overflow-hidden bg-neutral-900 border border-neutral-800"
+    <motion.div 
+      ref={ref}
+      style={{ x, opacity }}
+      className={`group flex flex-col ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'} gap-12 items-center w-full will-change-transform`}
     >
-      <div className="absolute inset-0 overflow-hidden">
-        <motion.div style={{ y }} className="w-full h-[120%] -top-[10%] relative">
-            <motion.img
-            src={project.image}
-            alt={project.title}
-            className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
-            animate={{ scale: isHovered ? 1.1 : 1 }}
-            transition={{ duration: 0.7 }}
-            />
-        </motion.div>
-      </div>
-      
-      {/* Dark Overlay */}
-      <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-500" />
-      
-      {/* Floating Details (Nourish Effect) */}
-      {project.details.map((detail, i) => (
-        <motion.div
-          key={i}
-          className="absolute z-20 pointer-events-none"
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ 
-            opacity: isHovered ? 1 : 0, 
-            scale: isHovered ? 1 : 0,
-            x: isHovered ? 0 : (Math.random() - 0.5) * 50,
-            y: isHovered ? 0 : (Math.random() - 0.5) * 50
-          }}
-          transition={{ duration: 0.4, delay: i * 0.1, type: "spring" }}
-          style={{ left: `${detail.x}%`, top: `${detail.y}%` }}
-        >
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 px-3 py-1 rounded-full flex flex-col items-center shadow-xl">
-            <span className="text-[8px] uppercase tracking-wider text-neutral-300">{detail.label}</span>
-            <span className="text-xs font-bold text-white">{detail.value}</span>
+        {/* Image Container */}
+        <div className="w-full md:w-2/3 relative">
+          <div className="overflow-hidden relative h-[50vh] md:h-[70vh] border border-white/5">
+              <div className="absolute inset-0 bg-neutral-900 z-0"></div>
+              <img 
+                src={project.image} 
+                alt={project.title} 
+                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-90 group-hover:opacity-100"
+              />
+              
+                {/* Overlay Number */}
+                <div className={`absolute -top-10 md:-top-16 z-20 mix-blend-difference pointer-events-none ${isEven ? '-left-4 md:-left-12' : '-right-4 md:-right-12'}`}>
+                      <span className="font-display font-bold text-8xl md:text-[10rem] text-white">0{index + 1}</span>
+                </div>
           </div>
-          {/* Connecting line visualization could go here */}
-        </motion.div>
-      ))}
+          
+          {/* Tech Specs */}
+          <div className={`flex gap-2 mt-4 ${!isEven && 'justify-end'}`}>
+              {project.specs.map((spec, i) => (
+                  <span key={i} className="text-[10px] uppercase tracking-widest border border-white/20 px-2 py-1 text-white/60">
+                      {spec}
+                  </span>
+              ))}
+          </div>
+        </div>
 
-      <div className="absolute inset-0 p-8 flex flex-col justify-end z-10">
-        <div className="transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500">
-            <div className="overflow-hidden mb-2">
-                <motion.p 
-                    className="text-xs font-bold text-neutral-400 uppercase tracking-widest"
-                    animate={{ y: isHovered ? 0 : 20, opacity: isHovered ? 1 : 0 }}
-                >
-                    {project.category}
-                </motion.p>
-            </div>
-            <h3 className="text-4xl font-display font-bold text-white mb-2 mix-blend-difference">{project.title}</h3>
-            <motion.div 
-                className="h-px bg-white/50 my-4 origin-left"
-                animate={{ scaleX: isHovered ? 1 : 0 }}
-                transition={{ duration: 0.5 }}
-            />
-             <motion.p 
-                className="text-neutral-300 text-sm max-w-[80%]"
-                animate={{ opacity: isHovered ? 1 : 0, height: isHovered ? 'auto' : 0 }}
-             >
-                {project.description}
-            </motion.p>
+        {/* Text Info */}
+        <div className={`w-full md:w-1/3 flex flex-col ${!isEven && 'items-end text-right'}`}>
+          <span className="text-xs font-bold text-neutral-500 uppercase tracking-widest mb-4">{project.category}</span>
+          <h3 className="text-4xl md:text-6xl font-display font-bold text-white mb-6 group-hover:text-neutral-200 transition-colors">{project.title}</h3>
+          <p className="text-neutral-400 text-lg leading-relaxed mb-8 max-w-sm">
+              {project.description}
+          </p>
+          
+          <div className={`flex items-center gap-4 ${!isEven && 'flex-row-reverse'}`}>
+              <div className="w-12 h-[1px] bg-white/30 group-hover:w-24 transition-all duration-300"></div>
+              <span className="text-xs font-bold uppercase tracking-widest">View Project</span>
+          </div>
         </div>
-      </div>
-      
-      {/* Number Badge */}
-      <div className="absolute top-0 right-0 p-6 z-20">
-        <div className="text-4xl font-display text-transparent text-outline opacity-30 group-hover:opacity-100 transition-opacity duration-500">
-            0{index + 1}
-        </div>
-      </div>
     </motion.div>
   );
 };
 
 const Portfolio: React.FC = () => {
-  return (
-    <section id="portfolio" className="relative py-32 bg-concrete-900 z-10">
-      <div className="container mx-auto px-6 mb-24">
-        <div className="flex flex-col md:flex-row items-end justify-between border-b border-white/10 pb-8">
-          <motion.h2 
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="font-display text-5xl md:text-7xl font-bold uppercase text-white leading-none"
-          >
-            Featured <br/> <span className="text-neutral-500">Works</span>
-          </motion.h2>
-          
-          <div className="mt-8 md:mt-0 flex gap-4">
-             <div className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center">
-                 <span className="text-xs">01</span>
-             </div>
-             <div className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center bg-white text-black">
-                 <span className="text-xs">All</span>
-             </div>
-          </div>
-        </div>
-      </div>
+  const { t } = useLanguage();
 
+  return (
+    <section id="portfolio" className="relative bg-concrete-900 py-24 overflow-hidden">
       <div className="container mx-auto px-6">
-        <div className="flex flex-wrap justify-between gap-y-16">
+        
+        {/* Header */}
+        <div className="mb-24 relative z-10">
+             <h2 className="font-display text-4xl md:text-8xl font-bold uppercase text-white leading-none">
+                {t.portfolio.featured} <br/> <span className="text-neutral-600 stroke-white">{t.portfolio.works}</span>
+             </h2>
+        </div>
+
+        {/* Vertical List using specific Scroll Components */}
+        <div className="flex flex-col gap-32">
           {projects.map((project, index) => (
-            <PortfolioCard key={project.id} project={project} index={index} />
+            <ProjectCard key={project.id} project={project} index={index} />
           ))}
         </div>
+
       </div>
     </section>
   );
 };
 
 export default Portfolio;
-    

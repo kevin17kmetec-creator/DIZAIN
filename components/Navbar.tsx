@@ -1,10 +1,13 @@
+
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const { language, setLanguage, t } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -14,11 +17,23 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    setMenuOpen(false);
+    const id = href.replace('#', '');
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    } else if (id === 'root') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   const navLinks = [
-    { name: 'Work', href: '#portfolio' },
-    { name: 'Services', href: '#services' },
-    { name: 'Agency', href: '#why-us' },
-    { name: 'Contact', href: '#contact' },
+    { name: t.nav.work, href: '#portfolio' },
+    { name: t.nav.services, href: '#services' },
+    { name: t.nav.agency, href: '#why-us' },
+    { name: t.nav.contact, href: '#contact' },
   ];
 
   return (
@@ -26,34 +41,68 @@ const Navbar: React.FC = () => {
       className={`fixed top-0 w-full z-40 transition-all duration-500 border-b ${
         scrolled
           ? 'bg-concrete-900/80 backdrop-blur-md border-white/10 py-4'
-          : 'bg-transparent border-transparent py-6'
+          : 'bg-transparent border-transparent py-8'
       }`}
     >
-      <div className="container mx-auto px-6 flex justify-between items-center">
-        <a href="#" className="text-2xl font-display font-bold tracking-widest text-white uppercase mix-blend-difference">
-          DIZAIN
-        </a>
-
+      {/* Changed justify-between to justify-end to align items right since logo is removed */}
+      <div className="container mx-auto px-6 flex justify-end items-center">
+        
         {/* Desktop Menu */}
-        <div className="hidden md:flex gap-12">
+        <div className="hidden md:flex items-center gap-12">
           {navLinks.map((link) => (
             <a
               key={link.name}
               href={link.href}
-              className="text-sm uppercase tracking-widest text-neutral-400 hover:text-white transition-colors duration-300 font-medium"
+              onClick={(e) => scrollToSection(e, link.href)}
+              className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-neutral-400 hover:text-white transition-colors duration-300 font-bold"
             >
               {link.name}
             </a>
           ))}
+          
+          {/* Language Switcher */}
+          <div className="flex items-center gap-2 border-l border-white/20 pl-6 ml-2">
+            <button 
+              onClick={() => setLanguage('sl')}
+              className={`text-[10px] font-bold uppercase transition-colors tracking-widest ${language === 'sl' ? 'text-white' : 'text-neutral-600 hover:text-neutral-400'}`}
+            >
+              SLO
+            </button>
+            <span className="text-neutral-700 text-[10px]">/</span>
+            <button 
+              onClick={() => setLanguage('en')}
+              className={`text-[10px] font-bold uppercase transition-colors tracking-widest ${language === 'en' ? 'text-white' : 'text-neutral-600 hover:text-neutral-400'}`}
+            >
+              ENG
+            </button>
+          </div>
         </div>
 
         {/* Mobile Menu Button */}
-        <button
-          className="md:hidden text-white z-50 relative"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          {menuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        <div className="md:hidden flex items-center gap-4 z-50">
+            {/* Mobile Lang Switcher */}
+            <div className="flex items-center gap-2 mr-2">
+                <button 
+                onClick={() => setLanguage('sl')}
+                className={`text-xs font-bold uppercase ${language === 'sl' ? 'text-white' : 'text-neutral-600'}`}
+                >
+                SL
+                </button>
+                <span className="text-neutral-700">/</span>
+                <button 
+                onClick={() => setLanguage('en')}
+                className={`text-xs font-bold uppercase ${language === 'en' ? 'text-white' : 'text-neutral-600'}`}
+                >
+                EN
+                </button>
+            </div>
+            <button
+            className="text-white"
+            onClick={() => setMenuOpen(!menuOpen)}
+            >
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+        </div>
 
         {/* Mobile Menu Overlay */}
         <AnimatePresence>
@@ -69,8 +118,8 @@ const Navbar: React.FC = () => {
                 <a
                   key={link.name}
                   href={link.href}
-                  onClick={() => setMenuOpen(false)}
-                  className="text-2xl font-display uppercase tracking-wider text-white hover:text-neutral-400"
+                  onClick={(e) => scrollToSection(e, link.href)}
+                  className="text-2xl font-display font-bold uppercase tracking-widest text-white hover:text-neutral-400"
                 >
                   {link.name}
                 </a>

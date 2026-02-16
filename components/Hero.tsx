@@ -1,7 +1,7 @@
 
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowDown } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Hero: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -9,111 +9,104 @@ const Hero: React.FC = () => {
     target: containerRef,
     offset: ["start start", "end start"]
   });
+  const { t } = useLanguage();
 
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "40%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
 
-  const title = "DIZAIN";
-  const letterVariants = {
-    hidden: { y: 100, opacity: 0, rotateX: -90 },
-    visible: (i: number) => ({
-      y: 0,
-      opacity: 1,
-      rotateX: 0,
-      transition: {
-        delay: i * 0.1,
-        duration: 1.2,
-        type: "spring",
-        bounce: 0.25
-      }
-    })
+  const handleScrollTo = (e: React.MouseEvent, id: string) => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
     <section ref={containerRef} className="relative h-screen flex flex-col items-center justify-center overflow-hidden bg-concrete-900">
-      {/* Dynamic Background Texture (Concrete) */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/80"></div>
-        {/* Spotlight Effect */}
-        <motion.div 
-          className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.08)_0%,_transparent_50%)] pointer-events-none"
-          animate={{ 
-            x: ["-10%", "10%", "-10%"],
-            y: ["-10%", "10%", "-10%"]
-          }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-        />
-      </div>
+      
+      {/* 
+        THE MONOLITH BACKGROUND (Central Logo Area)
+      */}
+      <motion.div 
+        className="absolute inset-0 z-0"
+        style={{ scale, opacity }}
+      >
+         {/* Base concrete texture */}
+         <div className="absolute inset-0 bg-concrete-900"></div>
+         
+         {/* The Logo Image Blended - Shifted UP by showing bottom part of image */}
+         <div 
+            className="absolute inset-0 bg-no-repeat opacity-80"
+            style={{ 
+                backgroundImage: `url('https://drive.google.com/thumbnail?id=1DlZuPg-7SZUxT8Etv1BqRjk_8C-t1xCQ&sz=w1920')`,
+                backgroundSize: 'cover',
+                // CRITICAL FIX: 'center 80%' pans down, moving the center logo UP in the viewport
+                backgroundPosition: 'center 80%',
+                // Mask edges
+                maskImage: 'radial-gradient(circle at center, black 40%, transparent 90%)',
+                WebkitMaskImage: 'radial-gradient(circle at center, black 40%, transparent 90%)'
+            }}
+         ></div>
+
+         {/* Stronger Dark Overlay for Text Readability */}
+         <div className="absolute inset-0 bg-gradient-to-b from-concrete-900/40 via-transparent to-concrete-900/90"></div>
+         
+         {/* Noise Texture */}
+         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
+      </motion.div>
 
       <motion.div 
         style={{ y, opacity }}
-        className="container mx-auto px-6 z-10 flex flex-col items-center relative"
+        className="container mx-auto px-6 z-10 flex flex-col items-center relative h-full"
       >
-        {/* Architectural Grid Lines (Vertical) */}
-        <div className="absolute top-0 bottom-0 left-6 md:left-24 w-px bg-white/5 h-[200vh] -translate-y-1/2" />
-        <div className="absolute top-0 bottom-0 right-6 md:right-24 w-px bg-white/5 h-[200vh] -translate-y-1/2" />
-
-        <div className="relative perspective-1000">
-           {/* Split Character Animation */}
-          <h1 className="font-display text-[18vw] md:text-[14vw] leading-[0.8] font-bold text-transparent bg-clip-text bg-gradient-to-b from-white to-neutral-500 tracking-tighter flex select-none mix-blend-difference">
-            {title.split("").map((char, i) => (
-              <motion.span
-                key={i}
-                custom={i}
-                variants={letterVariants}
-                initial="hidden"
-                animate="visible"
-                className="inline-block hover:text-white transition-colors duration-500 hover:scale-105 transform origin-bottom"
-                style={{ textShadow: "0 10px 30px rgba(0,0,0,0.5)" }}
-              >
-                {char}
-              </motion.span>
-            ))}
-          </h1>
-        </div>
+        {/* Architectural Grid Lines */}
+        <div className="absolute top-[-100vh] bottom-[-100vh] left-4 md:left-24 w-px bg-white/10" />
+        <div className="absolute top-[-100vh] bottom-[-100vh] right-4 md:right-24 w-px bg-white/10" />
         
-        <div className="overflow-hidden mt-12 md:mt-16 relative">
+        {/* Main Content - Pushed to absolute bottom 12 (approx 3rem/48px) with no extra padding */}
+        <div className="absolute bottom-12 left-0 right-0 flex flex-col items-center justify-end z-30 pb-0">
+          
           <motion.div
              initial={{ width: 0 }}
-             animate={{ width: "100%" }}
+             animate={{ width: "120px" }}
              transition={{ duration: 1.5, delay: 0.5, ease: "circOut" }}
-             className="h-px bg-white/20 absolute top-0 left-0"
+             className="h-[2px] bg-white mb-8 shadow-[0_0_15px_rgba(255,255,255,0.5)]"
           />
-          <motion.p 
-            initial={{ y: 40, opacity: 0 }}
+          
+          <motion.h1 
+            initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.8, duration: 0.8 }}
-            className="text-neutral-400 text-sm md:text-xl font-sans font-light tracking-[0.3em] uppercase max-w-xl text-center pt-8"
+            className="text-white text-lg md:text-3xl font-display font-bold tracking-[0.3em] uppercase text-center drop-shadow-2xl max-w-4xl px-4 leading-relaxed"
           >
-            Innovation Meets Architecture
-          </motion.p>
+            {t.hero.subtitle}
+          </motion.h1>
+
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.2, duration: 1 }}
+            className="mt-12"
+          >
+            <a 
+              href="#portfolio"
+              onClick={(e) => handleScrollTo(e, 'portfolio')}
+              className="group relative inline-flex items-center justify-center px-12 py-4 overflow-hidden font-display text-sm tracking-widest text-white transition-all duration-300 ease-out border border-white/40 bg-black/60 backdrop-blur-md hover:border-white hover:bg-white"
+            >
+              <span className="absolute flex items-center justify-center w-full h-full text-white transition-all duration-300 transform group-hover:translate-x-full ease">{t.hero.cta}</span>
+              <span className="relative invisible">{t.hero.cta}</span>
+              <span className="absolute inset-0 flex items-center justify-center w-full h-full text-black duration-300 -translate-x-full bg-white group-hover:translate-x-0 ease font-bold">
+                {t.hero.cta}
+              </span>
+            </a>
+          </motion.div>
         </div>
 
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5, duration: 1 }}
-          className="absolute bottom-[-15vh] md:bottom-[-20vh]"
-        >
-          <a 
-            href="#portfolio"
-            className="group flex flex-col items-center gap-4 text-white/50 hover:text-white transition-colors duration-300"
-          >
-            <span className="text-[10px] uppercase tracking-[0.2em]">Scroll to Explore</span>
-            <div className="w-px h-24 bg-gradient-to-b from-white/50 to-transparent relative overflow-hidden">
-               <motion.div 
-                 className="absolute top-0 left-0 w-full h-1/2 bg-white"
-                 animate={{ top: ["-100%", "100%"] }}
-                 transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-               />
-            </div>
-          </a>
-        </motion.div>
       </motion.div>
     </section>
   );
 };
 
 export default Hero;
-    
