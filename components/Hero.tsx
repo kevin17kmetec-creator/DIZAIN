@@ -36,13 +36,13 @@ const Hero: React.FC = () => {
          {/* Base concrete texture */}
          <div className="absolute inset-0 bg-concrete-900"></div>
          
-         {/* The Logo Image Blended - Shifted slightly lower than before */}
+         {/* The Logo Image Blended */}
          <div 
             className="absolute inset-0 bg-no-repeat opacity-80"
             style={{ 
                 backgroundImage: `url('https://drive.google.com/thumbnail?id=1DlZuPg-7SZUxT8Etv1BqRjk_8C-t1xCQ&sz=w1920')`,
                 backgroundSize: 'cover',
-                // Adjusted to 'center 60%' to lower the logo slightly from the previous '80%' setting
+                // Using existing position
                 backgroundPosition: 'center 60%',
                 // Mask edges
                 maskImage: 'radial-gradient(circle at center, black 40%, transparent 90%)',
@@ -61,19 +61,9 @@ const Hero: React.FC = () => {
         style={{ y, opacity }}
         className="container mx-auto px-6 z-10 flex flex-col items-center relative h-full"
       >
-        {/* Architectural Grid Lines */}
-        <div className="absolute top-[-100vh] bottom-[-100vh] left-4 md:left-24 w-px bg-white/10" />
-        <div className="absolute top-[-100vh] bottom-[-100vh] right-4 md:right-24 w-px bg-white/10" />
         
         {/* Main Content - Pushed to absolute bottom 12 (approx 3rem/48px) with no extra padding */}
         <div className="absolute bottom-12 left-0 right-0 flex flex-col items-center justify-end z-30 pb-0">
-          
-          <motion.div
-             initial={{ width: 0 }}
-             animate={{ width: "120px" }}
-             transition={{ duration: 1.5, delay: 0.5, ease: "circOut" }}
-             className="h-[2px] bg-white mb-8 shadow-[0_0_15px_rgba(255,255,255,0.5)]"
-          />
           
           <motion.h1 
             initial={{ y: 20, opacity: 0 }}
