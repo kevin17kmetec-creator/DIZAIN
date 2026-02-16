@@ -50,18 +50,22 @@ const projects: Project[] = [
 const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, index }) => {
   const ref = useRef<HTMLDivElement>(null);
   
-  // Trigger animation as soon as element enters viewport
+  // "start end" = when top of element enters bottom of viewport
+  // "end start" = when bottom of element leaves top of viewport
+  // This ensures the animation plays continuously while the element is visible
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start end", "center center"] 
+    offset: ["start end", "end start"] 
   });
 
   const isEven = index % 2 === 0;
   
-  // Reduced range to 200px so images don't start too far off-screen
-  const x = useTransform(scrollYProgress, [0, 1], [isEven ? -200 : 200, 0]);
+  // Continuous movement from entry to exit
+  // IsEven: Moves from -100px to 100px (Left to Right relative direction)
+  // !IsEven: Moves from 100px to -100px (Right to Left relative direction)
+  const x = useTransform(scrollYProgress, [0, 1], [isEven ? -100 : 100, isEven ? 100 : -100]);
   
-  // Immediate opacity fade in (0 to 100% in first 20% of scroll)
+  // Opacity fade in remains fast to ensure visibility
   const opacity = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
 
   return (

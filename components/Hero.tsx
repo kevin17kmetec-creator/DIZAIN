@@ -36,14 +36,14 @@ const Hero: React.FC = () => {
          {/* Base concrete texture */}
          <div className="absolute inset-0 bg-concrete-900"></div>
          
-         {/* The Logo Image Blended - Shifted UP by showing bottom part of image */}
+         {/* The Logo Image Blended - Shifted slightly lower than before */}
          <div 
             className="absolute inset-0 bg-no-repeat opacity-80"
             style={{ 
                 backgroundImage: `url('https://drive.google.com/thumbnail?id=1DlZuPg-7SZUxT8Etv1BqRjk_8C-t1xCQ&sz=w1920')`,
                 backgroundSize: 'cover',
-                // CRITICAL FIX: 'center 80%' pans down, moving the center logo UP in the viewport
-                backgroundPosition: 'center 80%',
+                // Adjusted to 'center 60%' to lower the logo slightly from the previous '80%' setting
+                backgroundPosition: 'center 60%',
                 // Mask edges
                 maskImage: 'radial-gradient(circle at center, black 40%, transparent 90%)',
                 WebkitMaskImage: 'radial-gradient(circle at center, black 40%, transparent 90%)'
