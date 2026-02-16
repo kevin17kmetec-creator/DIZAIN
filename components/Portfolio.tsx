@@ -1,7 +1,7 @@
 
 import React, { useRef } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
-import { motion, useScroll, useTransform, MotionValue } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 interface Project {
   id: number;
@@ -48,48 +48,45 @@ const projects: Project[] = [
 ];
 
 const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, index }) => {
-  const ref = useRef<HTMLDivElement>(null);
+  // We use a static ref for the container so the scroll calculation is stable
+  const containerRef = useRef<HTMLDivElement>(null);
   
-  // LOGIC: Start animation when top of element hits bottom of screen ("top bottom")
-  // End animation when center of element hits center of screen ("center center")
   const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["top bottom", "center center"] 
+    target: containerRef,
+    // Start: When top of card hits bottom of screen
+    // End: When center of card hits center of screen
+    offset: ["start end", "center center"] 
   });
 
   const isEven = index % 2 === 0;
   
-  // ANIMATION DIRECTION:
-  // isEven (Image Left): Moves from Right (250px) to Center (0px).
-  // !isEven (Image Right): Moves from Left (-250px) to Center (0px).
-  // This creates the effect of images sliding INTO place from the center outwards/inwards based on scroll.
-  const x = useTransform(scrollYProgress, [0, 1], [isEven ? 250 : -250, 0]);
+  // ANIMATION LOGIC:
+  // If isEven (Layout: Image Left, Text Right): Image comes FROM Right (150px) to 0.
+  // If !isEven (Layout: Image Right, Text Left): Image comes FROM Left (-150px) to 0.
+  const x = useTransform(scrollYProgress, [0, 1], [isEven ? 150 : -150, 0]);
   
-  // Opacity: Fades in as it approaches the center
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [0.3, 1]);
+  // Opacity: Starts at 0.2 (slightly visible) and hits 1.0 quickly (at 60% of scroll)
+  // so it doesn't look gray/disabled when nearly centered.
+  const opacity = useTransform(scrollYProgress, [0, 0.6], [0.2, 1]);
   
-  // Scale: Slight scale up effect for drama
-  const scale = useTransform(scrollYProgress, [0, 1], [0.9, 1]);
+  // Subtle scale up for depth
+  const scale = useTransform(scrollYProgress, [0, 1], [0.95, 1]);
 
   return (
-    <motion.div 
-      ref={ref}
-      style={{ opacity }}
-      className={`group flex flex-col ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'} gap-12 items-center w-full will-change-transform`}
+    <div 
+      ref={containerRef}
+      className={`flex flex-col ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'} gap-12 items-center w-full`}
     >
-        {/* 
-            Image Container - Now holding the X transform specifically 
-            This ensures the image slides while the text stays relatively stable (or fades).
-        */}
+        {/* Animated Image Container */}
         <motion.div 
-            style={{ x, scale }}
-            className="w-full md:w-2/3 relative"
+            style={{ x, opacity, scale }}
+            className="w-full md:w-2/3 relative will-change-transform"
         >
-          <div className="overflow-hidden relative h-[50vh] md:h-[70vh] border border-white/5 bg-neutral-900">
+          <div className="overflow-hidden relative h-[50vh] md:h-[70vh] border border-white/5 bg-neutral-900 shadow-2xl">
               <img 
                 src={project.image} 
                 alt={project.title} 
-                className="w-full h-full object-cover opacity-90 transition-all duration-700 group-hover:scale-105 group-hover:opacity-100"
+                className="w-full h-full object-cover opacity-90 transition-all duration-700 hover:scale-105 hover:opacity-100"
               />
               
               {/* Overlay Number */}
@@ -108,20 +105,20 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
           </div>
         </motion.div>
 
-        {/* Text Info - Static position, fades in with parent */}
+        {/* Text Info - Static or separate subtle animation */}
         <div className={`w-full md:w-1/3 flex flex-col ${!isEven && 'items-end text-right'}`}>
           <span className="text-xs font-bold text-neutral-500 uppercase tracking-widest mb-4">{project.category}</span>
-          <h3 className="text-4xl md:text-6xl font-display font-bold text-white mb-6 group-hover:text-neutral-200 transition-colors">{project.title}</h3>
+          <h3 className="text-4xl md:text-6xl font-display font-bold text-white mb-6 hover:text-neutral-200 transition-colors cursor-default">{project.title}</h3>
           <p className="text-neutral-400 text-lg leading-relaxed mb-8 max-w-sm">
               {project.description}
           </p>
           
-          <div className={`flex items-center gap-4 ${!isEven && 'flex-row-reverse'}`}>
+          <div className={`group flex items-center gap-4 cursor-pointer ${!isEven && 'flex-row-reverse'}`}>
               <div className="w-12 h-[1px] bg-white/30 group-hover:w-24 transition-all duration-300"></div>
-              <span className="text-xs font-bold uppercase tracking-widest">View Project</span>
+              <span className="text-xs font-bold uppercase tracking-widest text-white">View Project</span>
           </div>
         </div>
-    </motion.div>
+    </div>
   );
 };
 
@@ -130,17 +127,20 @@ const Portfolio: React.FC = () => {
 
   return (
     <section id="portfolio" className="relative bg-concrete-900 py-24 overflow-hidden">
+      {/* Background decoration to show depth */}
+      <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-white/[0.02] to-transparent pointer-events-none"></div>
+
       <div className="container mx-auto px-6">
         
         {/* Header */}
-        <div className="mb-24 relative z-10">
+        <div className="mb-32 relative z-10 text-center md:text-left">
              <h2 className="font-display text-4xl md:text-8xl font-bold uppercase text-white leading-none">
-                {t.portfolio.featured} <br/> <span className="text-neutral-600 stroke-white">{t.portfolio.works}</span>
+                {t.portfolio.featured} <br/> <span className="text-neutral-700 stroke-white">{t.portfolio.works}</span>
              </h2>
         </div>
 
-        {/* Vertical List using specific Scroll Components */}
-        <div className="flex flex-col gap-32">
+        {/* Vertical List */}
+        <div className="flex flex-col gap-32 md:gap-48">
           {projects.map((project, index) => (
             <ProjectCard key={project.id} project={project} index={index} />
           ))}
