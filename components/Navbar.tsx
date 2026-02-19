@@ -4,7 +4,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+    currentView: string;
+    onNavigate: (view: string) => void;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const { language, setLanguage, t } = useLanguage();
@@ -17,44 +22,51 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  // Updated: All items are now 'page' type for full view switching
+  const navLinks = [
+    { name: t.nav.work, id: 'works', type: 'page' },
+    { name: t.nav.services, id: 'services', type: 'page' },
+    { name: t.nav.agency, id: 'agency', type: 'page' },
+    { name: t.nav.contact, id: 'contact', type: 'page' },
+  ];
+
+  const handleNavClick = (e: React.MouseEvent, link: {id: string, type: string}) => {
     e.preventDefault();
     setMenuOpen(false);
-    const id = href.replace('#', '');
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    } else if (id === 'root') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    onNavigate(link.id);
   };
 
-  const navLinks = [
-    { name: t.nav.work, href: '#portfolio' },
-    { name: t.nav.services, href: '#services' },
-    { name: t.nav.agency, href: '#why-us' },
-    { name: t.nav.contact, href: '#contact' },
-  ];
+  const handleLogoClick = (e: React.MouseEvent) => {
+      e.preventDefault();
+      setMenuOpen(false);
+      onNavigate('home');
+  };
 
   return (
     <nav
       className={`fixed top-0 w-full z-40 transition-all duration-500 border-b ${
-        scrolled
-          ? 'bg-concrete-900/80 backdrop-blur-md border-white/10 py-4'
+        scrolled || currentView !== 'home'
+          ? 'bg-concrete-900/90 backdrop-blur-md border-white/10 py-4'
           : 'bg-transparent border-transparent py-8'
       }`}
     >
-      {/* Changed justify-between to justify-end to align items right since logo is removed */}
-      <div className="container mx-auto px-6 flex justify-end items-center">
+      <div className="container mx-auto px-6 flex justify-between items-center">
         
+        {/* Logo / Home Link */}
+        <a href="#" onClick={handleLogoClick} className="text-xl font-display font-bold tracking-widest text-white z-50">
+          DIZAIN
+        </a>
+
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-12">
           {navLinks.map((link) => (
             <a
               key={link.name}
-              href={link.href}
-              onClick={(e) => scrollToSection(e, link.href)}
-              className="text-[10px] md:text-xs uppercase tracking-[0.2em] text-neutral-400 hover:text-white transition-colors duration-300 font-bold"
+              href={`#${link.id}`}
+              onClick={(e) => handleNavClick(e, link)}
+              className={`text-[10px] md:text-xs uppercase tracking-[0.2em] transition-colors duration-300 font-bold ${
+                  currentView === link.id ? 'text-white' : 'text-neutral-400 hover:text-white'
+              }`}
             >
               {link.name}
             </a>
@@ -117,9 +129,9 @@ const Navbar: React.FC = () => {
               {navLinks.map((link) => (
                 <a
                   key={link.name}
-                  href={link.href}
-                  onClick={(e) => scrollToSection(e, link.href)}
-                  className="text-2xl font-display font-bold uppercase tracking-widest text-white hover:text-neutral-400"
+                  href={`#${link.id}`}
+                  onClick={(e) => handleNavClick(e, link)}
+                  className={`text-2xl font-display font-bold uppercase tracking-widest hover:text-neutral-400 ${currentView === link.id ? 'text-white' : 'text-neutral-500'}`}
                 >
                   {link.name}
                 </a>

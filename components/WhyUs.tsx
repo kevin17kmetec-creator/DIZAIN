@@ -10,7 +10,7 @@ const WhyUs: React.FC = () => {
   const icons = [<Target className="w-8 h-8" />, <Zap className="w-8 h-8" />, <Layers className="w-8 h-8" />];
 
   return (
-    <section id="why-us" className="py-32 bg-concrete-800 text-white relative border-t border-white/5">
+    <section className="py-32 bg-concrete-800 text-white relative">
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           

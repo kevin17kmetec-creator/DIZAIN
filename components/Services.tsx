@@ -45,8 +45,8 @@ const Services: React.FC = () => {
             >
               <div className="flex items-center justify-between px-2 md:px-8 relative z-20">
                 <div className="flex items-baseline gap-8">
-                    <span className="text-xs text-neutral-600 font-mono">0{index + 1}</span>
-                    <h3 className="font-display text-4xl md:text-7xl font-bold text-transparent text-outline group-hover:text-white transition-all duration-500 group-hover:translate-x-4">
+                    <span className="text-sm md:text-base text-neutral-500 font-mono transition-colors group-hover:text-white">0{index + 1}</span>
+                    <h3 className="font-display text-4xl md:text-7xl font-bold text-neutral-400 group-hover:text-white transition-all duration-500 group-hover:translate-x-4">
                     {service}
                     </h3>
                 </div>

@@ -3,16 +3,27 @@ import React, { useRef } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
-interface Project {
+export interface Project {
   id: number;
   title: string;
   category: string;
   image: string;
   description: string;
   specs: string[];
+  link?: string;
 }
 
-const projects: Project[] = [
+export const projects: Project[] = [
+  {
+    id: 0,
+    title: "ZK Photo Lab",
+    category: "Photography & Design",
+    // Abstract dark placeholder for photography vibe
+    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1964&auto=format&fit=crop", 
+    description: "Immersive visual storytelling platform for ZK Photo Lab.",
+    specs: ["React", "Gallery", "UX/UI"],
+    link: "https://www.zkphotolab.si/"
+  },
   {
     id: 1,
     title: "Nourish",
@@ -60,17 +71,22 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
 
   const isEven = index % 2 === 0;
   
-  // ANIMATION LOGIC:
+  // ANIMATION LOGIC (Restored from previous working version):
   // If isEven (Layout: Image Left, Text Right): Image comes FROM Right (150px) to 0.
   // If !isEven (Layout: Image Right, Text Left): Image comes FROM Left (-150px) to 0.
   const x = useTransform(scrollYProgress, [0, 1], [isEven ? 150 : -150, 0]);
   
-  // Opacity: Starts at 0.2 (slightly visible) and hits 1.0 quickly (at 60% of scroll)
-  // so it doesn't look gray/disabled when nearly centered.
+  // Opacity: Starts at 0.2 and hits 1.0 quickly so it doesn't look gray when centered
   const opacity = useTransform(scrollYProgress, [0, 0.6], [0.2, 1]);
   
   // Subtle scale up for depth
   const scale = useTransform(scrollYProgress, [0, 1], [0.95, 1]);
+
+  const handleProjectClick = () => {
+    if (project.link) {
+        window.open(project.link, '_blank');
+    }
+  };
 
   return (
     <div 
@@ -80,7 +96,8 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
         {/* Animated Image Container */}
         <motion.div 
             style={{ x, opacity, scale }}
-            className="w-full md:w-2/3 relative will-change-transform"
+            className={`w-full md:w-2/3 relative will-change-transform ${project.link ? 'cursor-pointer group' : ''}`}
+            onClick={project.link ? handleProjectClick : undefined}
         >
           <div className="overflow-hidden relative h-[50vh] md:h-[70vh] border border-white/5 bg-neutral-900 shadow-2xl">
               <img 
@@ -105,17 +122,27 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
           </div>
         </motion.div>
 
-        {/* Text Info - Static or separate subtle animation */}
+        {/* Text Info */}
         <div className={`w-full md:w-1/3 flex flex-col ${!isEven && 'items-end text-right'}`}>
           <span className="text-xs font-bold text-neutral-500 uppercase tracking-widest mb-4">{project.category}</span>
-          <h3 className="text-4xl md:text-6xl font-display font-bold text-white mb-6 hover:text-neutral-200 transition-colors cursor-default">{project.title}</h3>
+          <h3 
+            onClick={project.link ? handleProjectClick : undefined}
+            className={`text-4xl md:text-6xl font-display font-bold text-white mb-6 transition-colors ${project.link ? 'cursor-pointer hover:text-neutral-200' : ''}`}
+          >
+            {project.title}
+          </h3>
           <p className="text-neutral-400 text-lg leading-relaxed mb-8 max-w-sm">
               {project.description}
           </p>
           
-          <div className={`group flex items-center gap-4 cursor-pointer ${!isEven && 'flex-row-reverse'}`}>
+          <div 
+             onClick={project.link ? handleProjectClick : undefined}
+             className={`group flex items-center gap-4 ${!isEven && 'flex-row-reverse'} ${project.link ? 'cursor-pointer' : ''}`}
+          >
               <div className="w-12 h-[1px] bg-white/30 group-hover:w-24 transition-all duration-300"></div>
-              <span className="text-xs font-bold uppercase tracking-widest text-white">View Project</span>
+              <span className="text-xs font-bold uppercase tracking-widest text-white">
+                {project.link ? "Visit Site" : "View Project"}
+              </span>
           </div>
         </div>
     </div>

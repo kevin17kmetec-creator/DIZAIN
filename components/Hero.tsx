@@ -15,12 +15,9 @@ const Hero: React.FC = () => {
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
 
-  const handleScrollTo = (e: React.MouseEvent, id: string) => {
+  const handleScrollToWork = (e: React.MouseEvent) => {
     e.preventDefault();
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+    document.getElementById('portfolio')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
@@ -42,9 +39,7 @@ const Hero: React.FC = () => {
             style={{ 
                 backgroundImage: `url('https://drive.google.com/thumbnail?id=1DlZuPg-7SZUxT8Etv1BqRjk_8C-t1xCQ&sz=w1920')`,
                 backgroundSize: 'cover',
-                // Using existing position
                 backgroundPosition: 'center 60%',
-                // Mask edges
                 maskImage: 'radial-gradient(circle at center, black 40%, transparent 90%)',
                 WebkitMaskImage: 'radial-gradient(circle at center, black 40%, transparent 90%)'
             }}
@@ -82,7 +77,7 @@ const Hero: React.FC = () => {
           >
             <a 
               href="#portfolio"
-              onClick={(e) => handleScrollTo(e, 'portfolio')}
+              onClick={handleScrollToWork}
               className="group relative inline-flex items-center justify-center px-12 py-4 overflow-hidden font-display text-sm tracking-widest text-white transition-all duration-300 ease-out border border-white/40 bg-black/60 backdrop-blur-md hover:border-white hover:bg-white"
             >
               <span className="absolute flex items-center justify-center w-full h-full text-white transition-all duration-300 transform group-hover:translate-x-full ease">{t.hero.cta}</span>
