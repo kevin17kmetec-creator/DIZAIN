@@ -36,9 +36,8 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
     onNavigate(link.id);
   };
 
-  const handleLogoClick = (e: React.MouseEvent) => {
+  const handleHomeClick = (e: React.MouseEvent) => {
       e.preventDefault();
-      setMenuOpen(false);
       onNavigate('home');
   };
 
@@ -50,15 +49,36 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
           : 'bg-transparent border-transparent py-8'
       }`}
     >
-      <div className="container mx-auto px-6 flex justify-between items-center">
+      {/* 
+          LAYOUT CHANGE: 
+          Replaced 'container mx-auto px-6' with 'w-full px-6 md:px-12'.
+          This ensures the logo sits at the far left edge of the screen, not constrained by the center container.
+      */}
+      <div className="w-full px-6 md:px-12 flex justify-between md:grid md:grid-cols-3 items-center relative">
         
-        {/* Logo / Home Link */}
-        <a href="#" onClick={handleLogoClick} className="text-xl font-display font-bold tracking-widest text-white z-50">
-          DIZAIN
-        </a>
+        {/* 
+            LEFT: Logo (Visible only on subpages) 
+            Added justify-self-start for grid alignment
+        */}
+        <div 
+            className={`transition-opacity duration-300 z-50 justify-self-start ${currentView !== 'home' ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
+        >
+            <a 
+                href="#home" 
+                onClick={handleHomeClick}
+                className="border-[2px] border-white px-3 py-1.5 inline-block hover:bg-white group transition-colors duration-300"
+            >
+                <span className="font-logo font-bold text-xl tracking-[0.2em] text-white group-hover:text-black transition-colors duration-300 block">
+                    DIZAIN
+                </span>
+            </a>
+        </div>
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-12">
+        {/* 
+            CENTER: Desktop Menu 
+            Removed absolute positioning, used grid alignment
+        */}
+        <div className="hidden md:flex justify-self-center items-center gap-8 lg:gap-12 w-max">
           {navLinks.map((link) => (
             <a
               key={link.name}
@@ -71,49 +91,54 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
               {link.name}
             </a>
           ))}
-          
-          {/* Language Switcher */}
-          <div className="flex items-center gap-2 border-l border-white/20 pl-6 ml-2">
-            <button 
-              onClick={() => setLanguage('sl')}
-              className={`text-[10px] font-bold uppercase transition-colors tracking-widest ${language === 'sl' ? 'text-white' : 'text-neutral-600 hover:text-neutral-400'}`}
-            >
-              SLO
-            </button>
-            <span className="text-neutral-700 text-[10px]">/</span>
-            <button 
-              onClick={() => setLanguage('en')}
-              className={`text-[10px] font-bold uppercase transition-colors tracking-widest ${language === 'en' ? 'text-white' : 'text-neutral-600 hover:text-neutral-400'}`}
-            >
-              ENG
-            </button>
-          </div>
         </div>
 
-        {/* Mobile Menu Button */}
-        <div className="md:hidden flex items-center gap-4 z-50">
-            {/* Mobile Lang Switcher */}
-            <div className="flex items-center gap-2 mr-2">
+        {/* 
+            RIGHT: Controls (Desktop Lang + Mobile Menu) 
+        */}
+        <div className="justify-self-end flex items-center gap-4 z-50 ml-auto md:ml-0">
+            {/* Desktop Language Switcher */}
+            <div className="hidden md:flex items-center gap-2">
                 <button 
-                onClick={() => setLanguage('sl')}
-                className={`text-xs font-bold uppercase ${language === 'sl' ? 'text-white' : 'text-neutral-600'}`}
+                  onClick={() => setLanguage('sl')}
+                  className={`text-[10px] font-bold uppercase transition-colors tracking-widest ${language === 'sl' ? 'text-white' : 'text-neutral-600 hover:text-neutral-400'}`}
                 >
-                SL
+                  SLO
                 </button>
-                <span className="text-neutral-700">/</span>
+                <span className="text-neutral-700 text-[10px]">/</span>
                 <button 
-                onClick={() => setLanguage('en')}
-                className={`text-xs font-bold uppercase ${language === 'en' ? 'text-white' : 'text-neutral-600'}`}
+                  onClick={() => setLanguage('en')}
+                  className={`text-[10px] font-bold uppercase transition-colors tracking-widest ${language === 'en' ? 'text-white' : 'text-neutral-600 hover:text-neutral-400'}`}
                 >
-                EN
+                  ENG
                 </button>
             </div>
-            <button
-            className="text-white"
-            onClick={() => setMenuOpen(!menuOpen)}
-            >
-            {menuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+
+            {/* Mobile Controls */}
+            <div className="md:hidden flex items-center gap-4">
+                {/* Mobile Lang Switcher */}
+                <div className="flex items-center gap-2 mr-2">
+                    <button 
+                    onClick={() => setLanguage('sl')}
+                    className={`text-xs font-bold uppercase ${language === 'sl' ? 'text-white' : 'text-neutral-600'}`}
+                    >
+                    SL
+                    </button>
+                    <span className="text-neutral-700">/</span>
+                    <button 
+                    onClick={() => setLanguage('en')}
+                    className={`text-xs font-bold uppercase ${language === 'en' ? 'text-white' : 'text-neutral-600'}`}
+                    >
+                    EN
+                    </button>
+                </div>
+                <button
+                className="text-white"
+                onClick={() => setMenuOpen(!menuOpen)}
+                >
+                {menuOpen ? <X size={24} /> : <Menu size={24} />}
+                </button>
+            </div>
         </div>
 
         {/* Mobile Menu Overlay */}

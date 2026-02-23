@@ -60,12 +60,18 @@ interface Translations {
     };
     send: string;
   };
+  preview: {
+      back: string;
+      connecting: string;
+      live: string;
+      loadingEnv: string;
+  };
 }
 
 const translations: Record<Language, Translations> = {
   sl: {
     nav: {
-      work: 'Dela',
+      work: 'Reference',
       services: 'Storitve',
       agency: 'Agencija',
       contact: 'Kontakt',
@@ -76,9 +82,9 @@ const translations: Record<Language, Translations> = {
       scroll: 'Drsite za raziskovanje',
     },
     portfolio: {
-      title: 'Izbrana Dela',
-      featured: 'Izbrana',
-      works: 'Dela',
+      title: 'Izbrane Reference',
+      featured: 'Izbrane',
+      works: 'Reference',
       viewAll: 'Poglej Vse Projekte',
       tech: 'Tehnologija',
       perf: 'Zmogljivost',
@@ -129,6 +135,12 @@ const translations: Record<Language, Translations> = {
         details: 'Povejte nam več o podrobnostih...'
       },
       send: 'Pošlji Povpraševanje'
+    },
+    preview: {
+        back: 'Nazaj',
+        connecting: 'Povezovanje...',
+        live: 'Predogled v živo',
+        loadingEnv: 'Nalaganje zunanjega okolja...'
     }
   },
   en: {
@@ -197,6 +209,12 @@ const translations: Record<Language, Translations> = {
         details: 'Tell us about the details...'
       },
       send: 'Send Request'
+    },
+    preview: {
+        back: 'Back',
+        connecting: 'Connecting...',
+        live: 'Live Preview',
+        loadingEnv: 'Loading External Environment...'
     }
   }
 };

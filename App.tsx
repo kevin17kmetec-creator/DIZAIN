@@ -13,14 +13,18 @@ import WorksPage from './components/WorksPage';
 import ServicesPage from './components/ServicesPage';
 import AgencyPage from './components/AgencyPage';
 import ContactPage from './components/ContactPage';
+import ProjectPreviewPage from './components/ProjectPreviewPage';
+import BackToTop from './components/BackToTop';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+type ViewState = 'home' | 'works' | 'services' | 'agency' | 'contact' | 'preview';
+
 const AppContent: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
-  
-  // Updated state type to include new pages
-  const [view, setView] = useState<'home' | 'works' | 'services' | 'agency' | 'contact'>('home');
+  const [view, setView] = useState<ViewState>('home');
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previousView, setPreviousView] = useState<ViewState>('home');
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -58,10 +62,23 @@ const AppContent: React.FC = () => {
       window.scrollTo(0, 0);
   };
 
+  const handlePreview = (url: string) => {
+      setPreviousView(view);
+      setPreviewUrl(url);
+      setView('preview');
+  };
+
+  const handleClosePreview = () => {
+      setPreviewUrl(null);
+      setView(previousView);
+  };
+
   const renderView = () => {
       switch (view) {
+          case 'preview':
+              return previewUrl ? <ProjectPreviewPage url={previewUrl} onBack={handleClosePreview} /> : null;
           case 'works':
-              return <WorksPage />;
+              return <WorksPage onPreview={handlePreview} />;
           case 'services':
               return <ServicesPage />;
           case 'agency':
@@ -73,7 +90,7 @@ const AppContent: React.FC = () => {
               return (
                 <>
                     <Hero />
-                    <Portfolio />
+                    <Portfolio onPreview={handlePreview} />
                     <Services />
                     <div id="agency">
                         <WhyUs />
@@ -92,24 +109,32 @@ const AppContent: React.FC = () => {
         <div className="fixed inset-0 pointer-events-none opacity-[0.04] z-50 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay"></div>
         
         {/* Custom Cursor (Desktop Only) */}
-        {!isMobile && <CustomCursor />}
+        {!isMobile && view !== 'preview' && <CustomCursor />}
 
-        <Navbar currentView={view} onNavigate={handleNavigate} />
+        {/* Hide Navbar in preview mode */}
+        {view !== 'preview' && <Navbar currentView={view} onNavigate={handleNavigate} />}
 
-        <main className="relative z-10 w-full flex-grow flex flex-col">
+        <main className={`relative z-10 w-full flex-grow flex flex-col ${view === 'preview' ? 'h-screen overflow-hidden' : ''}`}>
            {renderView()}
         </main>
 
-        <Footer />
+        {/* Back to Top Button */}
+        {view !== 'preview' && <BackToTop />}
+
+        {view !== 'preview' && <Footer />}
     </div>
   );
 };
 
+import { ThemeProvider } from './contexts/ThemeContext';
+
 const App: React.FC = () => {
   return (
-    <LanguageProvider>
-      <AppContent />
-    </LanguageProvider>
+    <ThemeProvider>
+      <LanguageProvider>
+        <AppContent />
+      </LanguageProvider>
+    </ThemeProvider>
   );
 };
 

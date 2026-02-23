@@ -8,23 +8,40 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&family=Montserrat:wght@700&family=Syncopate:wght@400;700&family=Press+Start+2P&family=Playfair+Display:wght@400;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         theme: {
           extend: {
             fontFamily: {
-              sans: ['Manrope', 'sans-serif'],
-              display: ['Syncopate', 'sans-serif'],
+              sans: ['var(--font-family)', 'sans-serif'],
+              display: ['var(--font-family)', 'sans-serif'], // Override display font too
+              logo: ['Montserrat', 'sans-serif'],
             },
             colors: {
-              'concrete-900': '#050505',
-              'concrete-800': '#0a0a0a',
-              'concrete-700': '#141414',
-              'concrete-100': '#f0f0f0',
+              'concrete-900': 'var(--bg-color)',
+              'concrete-800': 'var(--button-bg)',
+              'concrete-700': 'var(--border-color)',
+              'concrete-100': 'var(--text-color)',
+              'white': 'var(--text-color)',
+              'black': 'var(--bg-color)',
             },
             backgroundImage: {
               'noise': "url('https://grainy-gradients.vercel.app/noise.svg')",
+            },
+            borderColor: {
+              DEFAULT: 'var(--border-color)',
+              'white': 'var(--border-color)',
+            },
+            borderRadius: {
+              'none': '0',
+              'sm': 'var(--border-radius)',
+              'md': 'var(--border-radius)',
+              'lg': 'var(--border-radius)',
+              'xl': 'var(--border-radius)',
+              '2xl': 'var(--border-radius)',
+              '3xl': 'var(--border-radius)',
+              'full': '9999px',
             }
           }
         }
@@ -86,8 +103,10 @@
   }
 }
 </script>
+<link rel="stylesheet" href="/index.css">
 </head>
   <body>
     <div id="root"></div>
-  </body>
+  <script type="module" src="/index.tsx"></script>
+</body>
 </html>

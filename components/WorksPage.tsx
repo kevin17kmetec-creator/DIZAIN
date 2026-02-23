@@ -3,10 +3,20 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '../contexts/LanguageContext';
 import { projects } from './Portfolio';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, Eye } from 'lucide-react';
 
-const WorksPage: React.FC = () => {
+interface WorksPageProps {
+    onPreview: (url: string) => void;
+}
+
+const WorksPage: React.FC<WorksPageProps> = ({ onPreview }) => {
   const { t } = useLanguage();
+
+  const handleProjectClick = (link?: string) => {
+      if (link) {
+          onPreview(link);
+      }
+  };
 
   return (
     <div className="min-h-screen bg-concrete-900 pt-32 pb-24 relative overflow-hidden">
@@ -41,7 +51,7 @@ const WorksPage: React.FC = () => {
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1, duration: 0.6 }}
                     className="group cursor-pointer"
-                    onClick={() => project.link && window.open(project.link, '_blank')}
+                    onClick={() => handleProjectClick(project.link)}
                 >
                     <div className="relative overflow-hidden aspect-[4/3] mb-6 border border-white/10 bg-neutral-900">
                         <div className="absolute inset-0 bg-neutral-800 animate-pulse" />
@@ -53,9 +63,9 @@ const WorksPage: React.FC = () => {
                         <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-300" />
                         
                         {/* Hover Overlay */}
-                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                             <div className="w-16 h-16 rounded-full bg-white text-black flex items-center justify-center transform scale-50 group-hover:scale-100 transition-transform duration-300">
-                                 <ArrowUpRight size={24} />
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 gap-4">
+                             <div className="w-16 h-16 rounded-full bg-white text-black flex items-center justify-center transform scale-50 group-hover:scale-100 transition-transform duration-300 shadow-xl">
+                                 {project.link ? <Eye size={24} /> : <ArrowUpRight size={24} />}
                              </div>
                         </div>
                     </div>

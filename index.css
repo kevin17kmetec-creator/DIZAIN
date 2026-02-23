@@ -1,0 +1,113 @@
+:root {
+  /* Minimalist (Default) */
+  --bg-color: #050505;
+  --text-color: #ffffff;
+  --font-family: 'Manrope', sans-serif;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --border-width: 1px;
+  --border-radius: 0px;
+  --accent-glow: none;
+  --button-bg: #141414;
+  --button-text: #ffffff;
+}
+
+html {
+  transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  transition: all 0.5s ease-in-out;
+}
+
+/* Theme: Neon / Cyberpunk */
+.theme-neon {
+  --bg-color: #000000;
+  --text-color: #00ffea;
+  --font-family: 'Courier New', monospace;
+  --border-color: #ff00ff;
+  --border-width: 2px;
+  --border-radius: 0px;
+  --accent-glow: 0 0 10px #ff00ff, 0 0 20px #00ffea;
+  --button-bg: #000000;
+  --button-text: #ff00ff;
+}
+
+/* Theme: Arcade / 8-bit */
+.theme-arcade {
+  --bg-color: #222222;
+  --text-color: #ffff00;
+  --font-family: 'Press Start 2P', cursive;
+  --border-color: #ff0000;
+  --border-width: 4px;
+  --border-radius: 0px;
+  --accent-glow: none;
+  --button-bg: #0000ff;
+  --button-text: #ffffff;
+}
+
+/* Theme: Nature / Organic */
+.theme-nature {
+  --bg-color: #f4f1ea;
+  --text-color: #2c3e50;
+  --font-family: 'Playfair Display', serif;
+  --border-color: #8b4513;
+  --border-width: 1px;
+  --border-radius: 20px;
+  --accent-glow: none;
+  --button-bg: #8fbc8f;
+  --button-text: #ffffff;
+}
+
+/* Theme: High-Tech / Glassmorphism */
+.theme-glass {
+  --bg-color: #0f172a;
+  --text-color: #e2e8f0;
+  --font-family: 'Orbitron', sans-serif;
+  --border-color: rgba(56, 189, 248, 0.5);
+  --border-width: 1px;
+  --border-radius: 12px;
+  --accent-glow: 0 0 15px rgba(56, 189, 248, 0.3);
+  --button-bg: rgba(255, 255, 255, 0.1);
+  --button-text: #38bdf8;
+}
+
+/* Apply variables to elements */
+button, a, div, section, nav {
+  transition: all 0.5s ease-in-out;
+}
+
+/* Override specific utility classes if needed, or rely on inheritance */
+.bg-concrete-900 {
+  background-color: var(--bg-color) !important;
+}
+
+.text-white {
+  color: var(--text-color) !important;
+}
+
+.border-white\/10, .border-white\/20, .border-white\/5 {
+  border-color: var(--border-color) !important;
+  border-width: var(--border-width) !important;
+  border-radius: var(--border-radius) !important;
+}
+
+/* Button specific styles based on theme */
+button {
+  box-shadow: var(--accent-glow);
+  border-radius: var(--border-radius);
+}
+
+/* Special handling for Nature texture */
+.theme-nature body {
+  background-image: url("https://www.transparenttextures.com/patterns/cream-paper.png");
+}
+
+/* Special handling for Glassmorphism */
+.theme-glass .bg-concrete-900\/90 {
+  background-color: rgba(15, 23, 42, 0.6) !important;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}

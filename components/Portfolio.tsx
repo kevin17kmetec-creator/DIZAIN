@@ -11,6 +11,7 @@ export interface Project {
   description: string;
   specs: string[];
   link?: string;
+  imageClass?: string; // Optional prop to override default image behavior
 }
 
 export const projects: Project[] = [
@@ -18,11 +19,13 @@ export const projects: Project[] = [
     id: 0,
     title: "ZK Photo Lab",
     category: "Photography & Design",
-    // Abstract dark placeholder for photography vibe
-    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1964&auto=format&fit=crop", 
+    // Google Drive image for ZK Photo Lab
+    image: "https://drive.google.com/thumbnail?id=1E4UqHuK74vn71mwMgxuDh3TWY4lCvCil&sz=w1920", 
     description: "Immersive visual storytelling platform for ZK Photo Lab.",
     specs: ["React", "Gallery", "UX/UI"],
-    link: "https://www.zkphotolab.si/"
+    link: "https://www.zkphotolab.si/",
+    // Using object-contain to show the full image without cropping
+    imageClass: "object-contain p-4 bg-black"
   },
   {
     id: 1,
@@ -58,7 +61,11 @@ export const projects: Project[] = [
   }
 ];
 
-const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, index }) => {
+interface PortfolioProps {
+    onPreview?: (url: string) => void;
+}
+
+const ProjectCard: React.FC<{ project: Project; index: number; onPreview?: (url: string) => void }> = ({ project, index, onPreview }) => {
   // We use a static ref for the container so the scroll calculation is stable
   const containerRef = useRef<HTMLDivElement>(null);
   
@@ -82,9 +89,14 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
   // Subtle scale up for depth
   const scale = useTransform(scrollYProgress, [0, 1], [0.95, 1]);
 
-  const handleProjectClick = () => {
+  const handleProjectClick = (e: React.MouseEvent) => {
+    e.preventDefault();
     if (project.link) {
-        window.open(project.link, '_blank');
+        if (onPreview) {
+            onPreview(project.link);
+        } else {
+            window.open(project.link, '_blank');
+        }
     }
   };
 
@@ -103,13 +115,13 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
               <img 
                 src={project.image} 
                 alt={project.title} 
-                className="w-full h-full object-cover opacity-90 transition-all duration-700 hover:scale-105 hover:opacity-100"
+                className={`w-full h-full ${project.imageClass || 'object-cover'} opacity-90 transition-all duration-700 hover:scale-105 hover:opacity-100`}
               />
-              
-              {/* Overlay Number */}
-              <div className={`absolute -top-10 md:-top-16 z-20 mix-blend-difference pointer-events-none ${isEven ? '-left-4 md:-left-12' : '-right-4 md:-right-12'}`}>
-                    <span className="font-display font-bold text-8xl md:text-[10rem] text-white">0{index + 1}</span>
-              </div>
+          </div>
+          
+          {/* Overlay Number */}
+          <div className={`absolute -top-10 md:-top-16 z-20 mix-blend-difference pointer-events-none ${isEven ? '-left-4 md:-left-12' : '-right-4 md:-right-12'}`}>
+                <span className="font-display font-bold text-8xl md:text-[10rem] text-white">0{index + 1}</span>
           </div>
           
           {/* Tech Specs */}
@@ -141,7 +153,7 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
           >
               <div className="w-12 h-[1px] bg-white/30 group-hover:w-24 transition-all duration-300"></div>
               <span className="text-xs font-bold uppercase tracking-widest text-white">
-                {project.link ? "Visit Site" : "View Project"}
+                {project.link ? "Live Preview" : "View Project"}
               </span>
           </div>
         </div>
@@ -149,7 +161,7 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
   );
 };
 
-const Portfolio: React.FC = () => {
+const Portfolio: React.FC<PortfolioProps> = ({ onPreview }) => {
   const { t } = useLanguage();
 
   return (
@@ -169,7 +181,7 @@ const Portfolio: React.FC = () => {
         {/* Vertical List */}
         <div className="flex flex-col gap-32 md:gap-48">
           {projects.map((project, index) => (
-            <ProjectCard key={project.id} project={project} index={index} />
+            <ProjectCard key={project.id} project={project} index={index} onPreview={onPreview} />
           ))}
         </div>
 
