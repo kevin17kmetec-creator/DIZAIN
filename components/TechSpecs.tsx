@@ -1,11 +1,29 @@
 
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Cell } from 'recharts';
 import { useLanguage } from '../contexts/LanguageContext';
 
 const TechSpecs: React.FC = () => {
   const { t } = useLanguage();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    const updateDimensions = () => {
+      if (containerRef.current) {
+        setDimensions({
+          width: containerRef.current.offsetWidth,
+          height: containerRef.current.offsetHeight,
+        });
+      }
+    };
+
+    updateDimensions();
+    window.addEventListener('resize', updateDimensions);
+
+    return () => window.removeEventListener('resize', updateDimensions);
+  }, []);
 
   const data = [
     { name: 'Others', speed: 65, fill: '#333' },
@@ -51,23 +69,40 @@ const TechSpecs: React.FC = () => {
             </div>
           </div>
 
-          <div className="h-[400px] w-full bg-neutral-900/20 p-8 border border-neutral-800 rounded-xl">
-             <h3 className="text-sm uppercase tracking-widest text-neutral-500 mb-8">{t.techSpecs.chartTitle}</h3>
-             <ResponsiveContainer width="100%" height="80%">
-                <BarChart data={data} layout="vertical" margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-                  <XAxis type="number" hide domain={[0, 100]} />
-                  <YAxis dataKey="name" type="category" stroke="#666" fontSize={12} width={100} tickLine={false} axisLine={false} />
-                  <Tooltip 
-                    cursor={{fill: 'transparent'}}
-                    contentStyle={{ backgroundColor: '#000', borderColor: '#333', color: '#fff' }}
-                  />
-                  <Bar dataKey="speed" barSize={30} radius={[0, 4, 4, 0]}>
-                    {data.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.fill} />
-                    ))}
-                  </Bar>
-                </BarChart>
-             </ResponsiveContainer>
+          <div className="h-[400px] w-full bg-neutral-900/20 p-8 border border-neutral-800 rounded-xl flex flex-col justify-between">
+             <h3 className="text-sm uppercase tracking-widest text-neutral-500 mb-4 shrink-0">{t.techSpecs.chartTitle}</h3>
+             <div ref={containerRef} className="w-full h-[300px]">
+               {dimensions.width > 0 && (
+                  <BarChart 
+                    width={dimensions.width} 
+                    height={dimensions.height} 
+                    data={data} 
+                    layout="vertical" 
+                    margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                  >
+                    <XAxis type="number" hide domain={[0, 100]} />
+                    <YAxis 
+                      dataKey="name" 
+                      type="category" 
+                      stroke="#666" 
+                      fontSize={12} 
+                      width={80} 
+                      tickLine={false} 
+                      axisLine={false} 
+                    />
+                    <Tooltip 
+                      cursor={{fill: 'rgba(255,255,255,0.05)'}}
+                      contentStyle={{ backgroundColor: '#050505', borderColor: '#333', color: '#fff' }}
+                      itemStyle={{ color: '#fff' }}
+                    />
+                    <Bar dataKey="speed" barSize={32} radius={[0, 4, 4, 0]} isAnimationActive={false}>
+                      {data.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.fill} strokeWidth={0} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+               )}
+             </div>
           </div>
 
         </div>

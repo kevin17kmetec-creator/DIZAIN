@@ -1,22 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 
 const CustomCursor: React.FC = () => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const cursorX = useMotionValue(-100);
+  const cursorY = useMotionValue(-100);
   const [isHovering, setIsHovering] = useState(false);
+
+  const springConfig = { damping: 20, stiffness: 300, mass: 0.5 };
+  const cursorXSpring = useSpring(cursorX, springConfig);
+  const cursorYSpring = useSpring(cursorY, springConfig);
 
   useEffect(() => {
     const updateMousePosition = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+      cursorX.set(e.clientX);
+      cursorY.set(e.clientY);
     };
 
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (target.tagName === 'A' || target.tagName === 'BUTTON' || target.closest('a') || target.closest('button')) {
-        setIsHovering(true);
-      } else {
-        setIsHovering(false);
-      }
+      const isClickable = 
+        target.tagName === 'A' || 
+        target.tagName === 'BUTTON' || 
+        target.closest('a') || 
+        target.closest('button') ||
+        target.classList.contains('cursor-pointer');
+      
+      setIsHovering(!!isClickable);
     };
 
     window.addEventListener('mousemove', updateMousePosition);
@@ -32,22 +41,30 @@ const CustomCursor: React.FC = () => {
     <>
       <motion.div
         className="fixed top-0 left-0 w-4 h-4 bg-white rounded-full pointer-events-none z-[100] mix-blend-difference"
+        style={{
+          translateX: cursorX,
+          translateY: cursorY,
+          x: -8,
+          y: -8,
+        }}
         animate={{
-          x: mousePosition.x - 8,
-          y: mousePosition.y - 8,
           scale: isHovering ? 0.5 : 1,
         }}
-        transition={{ type: 'tween', ease: 'linear', duration: 0 }}
+        transition={{ duration: 0.2 }}
       />
       <motion.div
         className="fixed top-0 left-0 w-12 h-12 border border-white rounded-full pointer-events-none z-[99] mix-blend-difference"
+        style={{
+          translateX: cursorXSpring,
+          translateY: cursorYSpring,
+          x: -24,
+          y: -24,
+        }}
         animate={{
-          x: mousePosition.x - 24,
-          y: mousePosition.y - 24,
           scale: isHovering ? 2 : 1,
           opacity: isHovering ? 0.5 : 1,
         }}
-        transition={{ type: 'spring', damping: 20, stiffness: 200, mass: 0.5 }}
+        transition={{ duration: 0.2 }}
       />
     </>
   );
