@@ -10,8 +10,9 @@ export interface Project {
   image: string;
   description: string;
   specs: string[];
+  date: string; // Added for sorting (YYYY-MM-DD)
   link?: string;
-  imageClass?: string; // Optional prop to override default image behavior
+  imageClass?: string;
 }
 
 export const projects: Project[] = [
@@ -19,46 +20,14 @@ export const projects: Project[] = [
     id: 0,
     title: "ZK Photo Lab",
     category: "Photography & Design",
-    // Google Drive image for ZK Photo Lab
     image: "https://drive.google.com/thumbnail?id=1E4UqHuK74vn71mwMgxuDh3TWY4lCvCil&sz=w1920", 
     description: "Immersive visual storytelling platform for ZK Photo Lab.",
     specs: ["React", "Gallery", "UX/UI"],
+    date: "2024-02-15",
     link: "https://www.zkphotolab.si/",
-    // Using object-contain to show the full image without cropping
     imageClass: "object-contain p-4 bg-black"
-  },
-  {
-    id: 1,
-    title: "Nourish",
-    category: "3D E-Commerce",
-    image: "https://picsum.photos/800/600?random=1",
-    description: "WebGL powered skincare experience.",
-    specs: ["Three.js", "React", "GSAP"]
-  },
-  {
-    id: 2,
-    title: "Vortex",
-    category: "FinTech",
-    image: "https://picsum.photos/800/600?random=2",
-    description: "Next-gen banking interface.",
-    specs: ["Security", "Real-time", "App"]
-  },
-  {
-    id: 3,
-    title: "Aeon",
-    category: "Architecture",
-    image: "https://picsum.photos/800/600?random=3",
-    description: "Minimalist portfolio platform.",
-    specs: ["Minimal", "Gallery", "CMS"]
-  },
-  {
-    id: 4,
-    title: "Zenith",
-    category: "Automotive",
-    image: "https://picsum.photos/800/600?random=4",
-    description: "Electric vehicle configurator.",
-    specs: ["3D", "Configurator", "Vue"]
   }
+  // Add more real projects here in the future
 ];
 
 interface PortfolioProps {
@@ -105,45 +74,51 @@ const ProjectCard: React.FC<{ project: Project; index: number; onPreview?: (url:
       ref={containerRef}
       className={`flex flex-col ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'} gap-12 items-center w-full`}
     >
-        {/* Animated Image Container */}
-        <motion.div 
-            style={{ x, opacity, scale }}
-            className={`w-full md:w-2/3 relative will-change-transform ${project.link ? 'cursor-pointer group' : ''}`}
-            onClick={project.link ? handleProjectClick : undefined}
-        >
-          <div className="overflow-hidden relative h-[50vh] md:h-[70vh] border border-white/5 bg-neutral-900 shadow-2xl">
-              <img 
-                src={project.image} 
-                alt={project.title} 
-                className={`w-full h-full ${project.imageClass || 'object-cover'} opacity-90 transition-all duration-700 hover:scale-105 hover:opacity-100`}
-              />
-          </div>
-          
-          {/* Overlay Number */}
-          <div className={`absolute -top-10 md:-top-16 z-20 mix-blend-difference pointer-events-none ${isEven ? '-left-4 md:-left-12' : '-right-4 md:-right-12'}`}>
+        {/* Image & Number Container */}
+        <div className="w-full md:w-2/3 relative">
+            {/* Animated Image Container */}
+            <motion.div 
+                style={{ x, opacity, scale }}
+                className={`relative will-change-transform ${project.link ? 'cursor-pointer group' : ''}`}
+                onClick={project.link ? handleProjectClick : undefined}
+            >
+              <div className="overflow-hidden relative h-[50vh] md:h-[70vh] border border-[var(--border-color)] bg-[var(--bg-secondary)] shadow-2xl">
+                  <img 
+                    src={project.image} 
+                    alt={`${project.title} - ${project.category} project preview`} 
+                    className={`w-full h-full ${project.imageClass || 'object-cover'} opacity-90 transition-all duration-700 hover:scale-105 hover:opacity-100`}
+                  />
+              </div>
+              
+              {/* Tech Specs */}
+              <div className={`flex gap-2 mt-4 ${!isEven && 'justify-end'}`}>
+                  {project.specs.map((spec, i) => (
+                      <span key={i} className="text-[10px] uppercase tracking-widest border border-[var(--border-color)] px-2 py-1 text-[var(--text-secondary)]">
+                          {spec}
+                      </span>
+                  ))}
+              </div>
+            </motion.div>
+
+            {/* Overlay Number - Moved outside the image motion.div to fix mix-blend-difference with background */}
+            <motion.div 
+                style={{ x, opacity, scale }}
+                className={`absolute -top-10 md:-top-16 z-20 mix-blend-difference pointer-events-none will-change-transform ${isEven ? '-left-4 md:-left-12' : '-right-4 md:-right-12'}`}
+            >
                 <span className="font-display font-bold text-8xl md:text-[10rem] text-white">0{index + 1}</span>
-          </div>
-          
-          {/* Tech Specs */}
-          <div className={`flex gap-2 mt-4 ${!isEven && 'justify-end'}`}>
-              {project.specs.map((spec, i) => (
-                  <span key={i} className="text-[10px] uppercase tracking-widest border border-white/20 px-2 py-1 text-white/60">
-                      {spec}
-                  </span>
-              ))}
-          </div>
-        </motion.div>
+            </motion.div>
+        </div>
 
         {/* Text Info */}
         <div className={`w-full md:w-1/3 flex flex-col ${!isEven && 'items-end text-right'}`}>
-          <span className="text-xs font-bold text-neutral-500 uppercase tracking-widest mb-4">{project.category}</span>
+          <span className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-widest mb-4">{project.category}</span>
           <h3 
             onClick={project.link ? handleProjectClick : undefined}
-            className={`text-4xl md:text-6xl font-display font-bold text-white mb-6 transition-colors ${project.link ? 'cursor-pointer hover:text-neutral-200' : ''}`}
+            className={`text-4xl md:text-6xl font-display font-bold text-[var(--text-main)] mb-6 transition-colors ${project.link ? 'cursor-pointer hover:text-[var(--text-secondary)]' : ''}`}
           >
             {project.title}
           </h3>
-          <p className="text-neutral-400 text-lg leading-relaxed mb-8 max-w-sm">
+          <p className="text-[var(--text-secondary)] text-lg leading-relaxed mb-8 max-w-sm">
               {project.description}
           </p>
           
@@ -151,8 +126,8 @@ const ProjectCard: React.FC<{ project: Project; index: number; onPreview?: (url:
              onClick={project.link ? handleProjectClick : undefined}
              className={`group flex items-center gap-4 ${!isEven && 'flex-row-reverse'} ${project.link ? 'cursor-pointer' : ''}`}
           >
-              <div className="w-12 h-[1px] bg-white/30 group-hover:w-24 transition-all duration-300"></div>
-              <span className="text-xs font-bold uppercase tracking-widest text-white">
+              <div className="w-12 h-[1px] bg-[var(--text-main)]/30 group-hover:w-24 transition-all duration-300"></div>
+              <span className="text-xs font-bold uppercase tracking-widest text-[var(--text-main)]">
                 {project.link ? "Live Preview" : "View Project"}
               </span>
           </div>
@@ -164,23 +139,28 @@ const ProjectCard: React.FC<{ project: Project; index: number; onPreview?: (url:
 const Portfolio: React.FC<PortfolioProps> = ({ onPreview }) => {
   const { t } = useLanguage();
 
+  // Sort projects by date (newest first) and limit to 5 for home page
+  const displayedProjects = [...projects]
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 5);
+
   return (
-    <section id="portfolio" className="relative bg-concrete-900 py-24 overflow-hidden">
+    <section id="portfolio" className="relative bg-[var(--bg-main)] py-24 overflow-hidden transition-colors duration-500">
       {/* Background decoration to show depth */}
-      <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-white/[0.02] to-transparent pointer-events-none"></div>
+      <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-[var(--text-main)]/[0.02] to-transparent pointer-events-none"></div>
 
       <div className="container mx-auto px-6">
         
         {/* Header */}
         <div className="mb-32 relative z-10 text-center md:text-left">
-             <h2 className="font-display text-4xl md:text-8xl font-bold uppercase text-white leading-none">
-                {t.portfolio.featured} <br/> <span className="text-neutral-700 stroke-white">{t.portfolio.works}</span>
+             <h2 className="font-display text-4xl md:text-8xl font-bold uppercase text-[var(--text-main)] leading-none">
+                {t.portfolio.featured} <br/> <span className="text-[var(--text-muted)]">{t.portfolio.works}</span>
              </h2>
         </div>
 
         {/* Vertical List */}
         <div className="flex flex-col gap-32 md:gap-48">
-          {projects.map((project, index) => (
+          {displayedProjects.map((project, index) => (
             <ProjectCard key={project.id} project={project} index={index} onPreview={onPreview} />
           ))}
         </div>

@@ -29,7 +29,7 @@ const ProjectPreviewPage: React.FC<ProjectPreviewPageProps> = ({ url, onBack }) 
   }, []);
 
   return (
-    <div className="fixed inset-0 z-[100] bg-concrete-900 flex flex-col w-full h-full">
+    <div className="fixed inset-0 z-[100] bg-[var(--bg-main)] flex flex-col w-full h-full transition-colors duration-500">
       
       {/* 
           TRIGGER BUTTON (Visible when menu is closed)
@@ -43,7 +43,7 @@ const ProjectPreviewPage: React.FC<ProjectPreviewPageProps> = ({ url, onBack }) 
                 exit={{ opacity: 0, scale: 0.8 }}
                 transition={{ duration: 0.3 }}
                 onClick={() => setMenuOpen(true)}
-                className="absolute top-32 left-6 z-50 bg-black/80 text-white p-4 hover:bg-white hover:text-black transition-colors duration-300 border border-white/10 rounded-full shadow-2xl backdrop-blur-md group"
+                className="absolute top-32 left-6 z-50 bg-[var(--bg-main)]/80 text-[var(--text-main)] p-4 hover:bg-[var(--text-main)] hover:text-[var(--bg-main)] transition-colors duration-300 border border-[var(--border-color)] rounded-full shadow-2xl backdrop-blur-md group"
             >
                 <Menu size={24} className="group-hover:scale-110 transition-transform" />
             </motion.button>
@@ -72,14 +72,14 @@ const ProjectPreviewPage: React.FC<ProjectPreviewPageProps> = ({ url, onBack }) 
                     animate={{ x: 0 }}
                     exit={{ x: '-100%' }}
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    className="absolute top-0 left-0 h-full w-full max-w-sm bg-concrete-900/95 backdrop-blur-xl border-r border-white/10 z-50 p-12 flex flex-col shadow-2xl"
+                    className="absolute top-0 left-0 h-full w-full max-w-sm bg-[var(--bg-main)]/95 backdrop-blur-xl border-r border-[var(--border-color)] z-50 p-12 flex flex-col shadow-2xl"
                 >
                     {/* Drawer Header */}
                     <div className="flex justify-between items-center mb-16">
-                        <span className="font-display font-bold tracking-widest text-white text-xl">MENU</span>
+                        <span className="font-display font-bold tracking-widest text-[var(--text-main)] text-xl">MENU</span>
                         <button 
                             onClick={() => setMenuOpen(false)} 
-                            className="text-white hover:rotate-90 transition-transform duration-300 p-2 hover:bg-white/10 rounded-full"
+                            className="text-[var(--text-main)] hover:rotate-90 transition-transform duration-300 p-2 hover:bg-[var(--text-main)]/10 rounded-full"
                         >
                             <X size={32} />
                         </button>
@@ -89,8 +89,8 @@ const ProjectPreviewPage: React.FC<ProjectPreviewPageProps> = ({ url, onBack }) 
                     <div className="space-y-12">
                          {/* Status Indicator */}
                          <div>
-                            <div className="text-xs font-bold uppercase tracking-widest text-neutral-500 mb-4">Status</div>
-                            <div className="flex items-center gap-4 text-white bg-black/40 p-4 rounded border border-white/5">
+                            <div className="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)] mb-4">Status</div>
+                            <div className="flex items-center gap-4 text-[var(--text-main)] bg-[var(--bg-secondary)]/40 p-4 rounded border border-[var(--border-color)]">
                                 <div className={`w-3 h-3 rounded-full ${loading ? 'bg-yellow-500 animate-pulse' : 'bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]'}`}></div>
                                 <span className="font-display font-bold tracking-widest text-sm">
                                     {loading ? t.preview.connecting : t.preview.live}
@@ -100,12 +100,12 @@ const ProjectPreviewPage: React.FC<ProjectPreviewPageProps> = ({ url, onBack }) 
                          
                          {/* Project Source URL (Clickable) */}
                          <div>
-                            <div className="text-xs font-bold uppercase tracking-widest text-neutral-500 mb-4">Source</div>
+                            <div className="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)] mb-4">Source</div>
                             <a 
                                 href={url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="group flex items-start gap-3 text-white/50 hover:text-white transition-colors font-mono text-xs break-all border-l-2 border-white/10 hover:border-white pl-4 py-2"
+                                className="group flex items-start gap-3 text-[var(--text-secondary)] hover:text-[var(--text-main)] transition-colors font-mono text-xs break-all border-l-2 border-[var(--border-color)] hover:border-[var(--text-main)] pl-4 py-2"
                             >
                                 <span>{url}</span>
                                 <ExternalLink size={12} className="shrink-0 mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -117,7 +117,7 @@ const ProjectPreviewPage: React.FC<ProjectPreviewPageProps> = ({ url, onBack }) 
                     <div className="mt-auto">
                         <button
                             onClick={onBack}
-                            className="w-full bg-white text-black py-6 flex items-center justify-center gap-4 hover:bg-neutral-200 transition-colors group tracking-widest font-bold font-display uppercase text-sm"
+                            className="w-full bg-[var(--text-main)] text-[var(--bg-main)] py-6 flex items-center justify-center gap-4 hover:bg-[var(--text-secondary)] transition-colors group tracking-widest font-bold font-display uppercase text-sm"
                         >
                             <ArrowLeft size={18} className="transition-transform group-hover:-translate-x-1" />
                             {t.preview.back}
@@ -135,17 +135,17 @@ const ProjectPreviewPage: React.FC<ProjectPreviewPageProps> = ({ url, onBack }) 
                 initial={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.5 }}
-                className="absolute inset-0 flex flex-col items-center justify-center bg-concrete-900 z-30 pointer-events-none"
+                className="absolute inset-0 flex flex-col items-center justify-center bg-[var(--bg-main)] z-30 pointer-events-none"
             >
                 <div className="relative">
-                    <div className="absolute inset-0 bg-white/20 blur-xl rounded-full"></div>
-                    <Loader2 className="animate-spin text-white relative z-10 w-12 h-12 mb-8 opacity-50" />
+                    <div className="absolute inset-0 bg-[var(--text-main)]/20 blur-xl rounded-full"></div>
+                    <Loader2 className="animate-spin text-[var(--text-main)] relative z-10 w-12 h-12 mb-8 opacity-50" />
                 </div>
                 
-                <span className="font-display font-bold tracking-[0.3em] text-white animate-pulse text-lg">
+                <span className="font-display font-bold tracking-[0.3em] text-[var(--text-main)] animate-pulse text-lg">
                     DIZAIN PREVIEW
                 </span>
-                <span className="text-neutral-500 text-xs mt-2 font-mono">{t.preview.loadingEnv}</span>
+                <span className="text-[var(--text-muted)] text-xs mt-2 font-mono">{t.preview.loadingEnv}</span>
             </motion.div>
         )}
       </AnimatePresence>

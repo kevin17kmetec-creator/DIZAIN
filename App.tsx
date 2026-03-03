@@ -80,7 +80,7 @@ const AppContent: React.FC = () => {
           case 'works':
               return <WorksPage onPreview={handlePreview} />;
           case 'services':
-              return <ServicesPage />;
+              return <ServicesPage onNavigate={handleNavigate} />;
           case 'agency':
               return <AgencyPage />;
           case 'contact':
@@ -103,10 +103,10 @@ const AppContent: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-concrete-900 text-white selection:bg-white selection:text-concrete-900 flex flex-col">
+    <div className="relative min-h-screen bg-[var(--bg-main)] text-[var(--text-main)] selection:bg-[var(--text-main)] selection:text-[var(--bg-main)] flex flex-col transition-colors duration-500">
       
         {/* Global Noise Texture */}
-        <div className="fixed inset-0 pointer-events-none opacity-[0.04] z-50 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay"></div>
+        <div className="fixed inset-0 pointer-events-none opacity-[var(--noise-opacity)] z-50 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay"></div>
         
         {/* Custom Cursor (Desktop Only) */}
         {!isMobile && view !== 'preview' && <CustomCursor />}

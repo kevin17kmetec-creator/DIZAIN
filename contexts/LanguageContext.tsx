@@ -101,16 +101,16 @@ const translations: Record<Language, Translations> = {
       desc: 'Delujemo na stičišču oblikovanja in inženiringa. Naša filozofija je preprosta: gradimo čudovite stvari, ki delujejo brezhibno.',
       items: [
         {
-          title: "Natančnost",
-          desc: "Implementacija kompleksnih dizajnov do zadnjega piksla. Kodo obravnavamo kot arhitekturo."
-        },
-        {
           title: "Hitrost",
-          desc: "Optimizirano za takojšnje nalaganje z uporabo naprednega predpomnjenja in 'edge' računalništva."
+          desc: "Izvedba strani v manj kot 7 dneh. Od potrditve do lansiranja v rekordnem času."
         },
         {
-          title: "Razširljivost",
-          desc: "Modularni sistemi, zgrajeni za rast z vašim podjetjem, od startupa do korporacije."
+          title: "Brezplačen Osnutek",
+          desc: "Ob zanimanju pripravimo neobvezujoč prvi vizualni osnutek nove strani pred potrditvijo."
+        },
+        {
+          title: "Filozofija",
+          desc: "Nič ni nemogoče – le način je treba najti, da postane mogoče. Ne poznamo omejitev."
         }
       ]
     },

@@ -1,35 +1,35 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-export type Theme = 'minimalist' | 'neon' | 'arcade' | 'nature' | 'glass';
+export type Theme = 'dark' | 'light';
 
 interface ThemeContextType {
   theme: Theme;
   setTheme: (theme: Theme) => void;
-  nextTheme: () => void;
+  toggleTheme: () => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setTheme] = useState<Theme>('minimalist');
+  const [theme, setTheme] = useState<Theme>('dark');
 
   useEffect(() => {
     const root = document.documentElement;
-    // Remove all theme classes
-    root.classList.remove('theme-minimalist', 'theme-neon', 'theme-arcade', 'theme-nature', 'theme-glass');
-    // Add current theme class
-    root.classList.add(`theme-${theme}`);
+    if (theme === 'light') {
+      root.classList.add('theme-light');
+      root.classList.remove('theme-dark');
+    } else {
+      root.classList.add('theme-dark');
+      root.classList.remove('theme-light');
+    }
   }, [theme]);
 
-  const nextTheme = () => {
-    const themes: Theme[] = ['minimalist', 'neon', 'arcade', 'nature', 'glass'];
-    const currentIndex = themes.indexOf(theme);
-    const nextIndex = (currentIndex + 1) % themes.length;
-    setTheme(themes[nextIndex]);
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme, nextTheme }}>
+    <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   );

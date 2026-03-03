@@ -8,7 +8,7 @@ const AgencyPage: React.FC = () => {
   const { t } = useLanguage();
 
   return (
-    <div className="min-h-screen bg-concrete-900 pt-32 pb-0 relative overflow-hidden">
+    <div className="min-h-screen bg-[var(--bg-main)] pt-32 pb-0 relative overflow-hidden transition-colors duration-500">
         
       <div className="container mx-auto px-6 relative z-10 mb-24">
         {/* Header */}
@@ -18,20 +18,20 @@ const AgencyPage: React.FC = () => {
             transition={{ duration: 0.8 }}
             className="mb-16"
         >
-            <h1 className="font-display text-5xl md:text-8xl font-bold uppercase text-white mb-8 leading-[0.9]">
+            <h1 className="font-display text-5xl md:text-8xl font-bold uppercase text-[var(--text-main)] mb-8 leading-[0.9]">
                 {t.nav.agency}
             </h1>
-            <div className="w-full h-[1px] bg-gradient-to-r from-white/50 to-transparent mb-12"></div>
+            <div className="w-full h-[1px] bg-gradient-to-r from-[var(--text-main)]/50 to-transparent mb-12"></div>
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
                 <div>
-                    <h2 className="text-3xl font-bold text-white mb-6">{t.whyUs.title}</h2>
-                    <p className="text-neutral-400 text-lg leading-relaxed">
+                    <h2 className="text-3xl font-bold text-[var(--text-main)] mb-6">{t.whyUs.title}</h2>
+                    <p className="text-[var(--text-secondary)] text-lg leading-relaxed">
                         {t.whyUs.desc}
                     </p>
                 </div>
-                <div className="border-l border-white/10 pl-8 flex flex-col justify-center">
-                     <p className="text-2xl text-white italic font-serif opacity-80">
+                <div className="border-l border-[var(--border-color)] pl-8 flex flex-col justify-center">
+                     <p className="text-2xl text-[var(--text-main)] italic font-serif opacity-80">
                         "Arhitektura ni le o zgradbah. Je o strukturi informacij, občutku prostora in toku interakcije v digitalnem svetu."
                      </p>
                 </div>
@@ -47,18 +47,18 @@ const AgencyPage: React.FC = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 }}
-                    className="border-t border-white/20 pt-6"
+                    className="border-t border-[var(--border-color-hover)] pt-6"
                 >
-                    <span className="text-xs font-bold uppercase tracking-widest text-neutral-500 mb-4 block">0{index+1}</span>
-                    <h3 className="text-2xl font-bold text-white mb-3">{item.title}</h3>
-                    <p className="text-neutral-400 leading-relaxed text-sm">{item.desc}</p>
+                    <span className="text-xs font-bold uppercase tracking-widest text-[var(--text-muted)] mb-4 block">0{index+1}</span>
+                    <h3 className="text-2xl font-bold text-[var(--text-main)] mb-3">{item.title}</h3>
+                    <p className="text-[var(--text-secondary)] leading-relaxed text-sm">{item.desc}</p>
                 </motion.div>
             ))}
         </div>
       </div>
 
       {/* Tech Specs Section embedded */}
-      <div className="bg-black">
+      <div className="bg-[var(--bg-main)]">
           <TechSpecs />
       </div>
 

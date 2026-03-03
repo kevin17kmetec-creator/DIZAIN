@@ -105,7 +105,7 @@ const BackToTop: React.FC = () => {
                         {/* The Rope Line */}
                         <motion.path
                             fill="none"
-                            stroke="white"
+                            stroke="var(--text-main)"
                             strokeWidth="0.5" // Tanka vrv
                             variants={ropeVariants}
                             initial="idle"
@@ -132,7 +132,7 @@ const BackToTop: React.FC = () => {
                                  : { duration: 0.2 }
                              }
                         >
-                            <path d="M 10 1 L 15 0 L 20 1 M 15 0 L 15 3" stroke="white" strokeWidth="1" fill="none" />
+                            <path d="M 10 1 L 15 0 L 20 1 M 15 0 L 15 3" stroke="var(--text-main)" strokeWidth="1" fill="none" />
                         </motion.g>
                     </svg>
                 )}
@@ -154,17 +154,16 @@ const BackToTop: React.FC = () => {
             transition={{ duration: 0.3 }}
             onClick={triggerHook}
             disabled={hookStage !== 'idle'}
-            className={`fixed bottom-8 right-8 z-30 p-4 border shadow-2xl transition-colors duration-300 group overflow-hidden ${
+            className={`fixed bottom-8 right-8 z-30 p-4 border shadow-2xl transition-all duration-300 group overflow-hidden ${
                 hookStage !== 'idle'
-                    ? 'bg-neutral-300 border-white' // Active state
-                    : 'bg-neutral-200 border-neutral-300 hover:bg-white text-black' // Default concrete state
+                    ? 'bg-[var(--text-secondary)] border-[var(--text-main)]' // Active state
+                    : 'bg-[var(--bg-secondary)] border-[var(--border-color)] hover:bg-[var(--text-main)] hover:text-[var(--bg-main)] text-[var(--text-main)]' // Default state
             }`}
             aria-label="Back to top"
             >
                 <div className="relative z-10">
                     <ArrowUp 
                         size={20} 
-                        color="black" // Explicit black arrow
                         className={`transition-transform duration-500 ${hookStage !== 'idle' ? '-translate-y-[150%]' : 'group-hover:-translate-y-1'}`} 
                     />
                 </div>

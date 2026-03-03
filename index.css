@@ -5,12 +5,57 @@
   --font-display: "Syncopate", sans-serif;
   --font-logo: "Montserrat", sans-serif;
 
-  --color-concrete-900: #050505;
-  --color-concrete-800: #0a0a0a;
-  --color-concrete-700: #141414;
-  --color-concrete-100: #f0f0f0;
+  /* Map Tailwind colors to CSS variables */
+  --color-concrete-900: var(--bg-main);
+  --color-concrete-800: var(--bg-secondary);
+  --color-concrete-700: var(--bg-tertiary);
+  --color-concrete-100: var(--text-main);
+  
+  /* Redefine standard colors if possible, or use custom ones */
+  --color-bg-main: var(--bg-main);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-text-main: var(--text-main);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-border: var(--border-color);
 
   --background-image-noise: url('https://grainy-gradients.vercel.app/noise.svg');
+}
+
+:root {
+  /* Default (Dark) Theme */
+  --bg-main: #050505;
+  --bg-secondary: #0a0a0a;
+  --bg-tertiary: #141414;
+  --text-main: #ffffff;
+  --text-secondary: #a3a3a3; /* neutral-400 */
+  --text-muted: #525252; /* neutral-600 */
+  --border-color: rgba(255, 255, 255, 0.1);
+  --border-color-hover: rgba(255, 255, 255, 0.2);
+  --accent-color: #ffffff;
+  --noise-opacity: 0.04;
+  
+  /* Invert logic for standard classes */
+  --color-white-dynamic: #ffffff;
+  --color-black-dynamic: #000000;
+}
+
+.theme-light {
+  /* Light Theme */
+  --bg-main: #ffffff;
+  --bg-secondary: #f5f5f5; /* neutral-100 */
+  --bg-tertiary: #e5e5e5; /* neutral-200 */
+  --text-main: #050505;
+  --text-secondary: #525252; /* neutral-600 */
+  --text-muted: #a3a3a3; /* neutral-400 */
+  --border-color: rgba(0, 0, 0, 0.1);
+  --border-color-hover: rgba(0, 0, 0, 0.2);
+  --accent-color: #050505;
+  --noise-opacity: 0.02;
+
+  /* Invert logic */
+  --color-white-dynamic: #000000;
+  --color-black-dynamic: #ffffff;
 }
 
 /* Ensure native scrolling works flawlessly */
@@ -19,12 +64,13 @@ html, body {
   min-height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #050505;
-  color: #ffffff;
+  background-color: var(--bg-main);
+  color: var(--text-main);
   cursor: default;
   overflow-x: hidden;
   overflow-y: auto;
   scroll-behavior: smooth;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Custom Scrollbar */
@@ -33,17 +79,22 @@ html, body {
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #050505;
+  background: var(--bg-main);
 }
 ::-webkit-scrollbar-thumb {
-  background: #333;
+  background: var(--text-muted);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: var(--text-secondary);
+}
+
+::selection {
+  background: var(--accent-color);
+  color: var(--bg-main);
 }
 
 .text-outline {
-  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.2);
+  -webkit-text-stroke: 1px var(--border-color-hover);
   color: transparent;
 }

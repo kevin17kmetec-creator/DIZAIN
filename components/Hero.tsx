@@ -21,7 +21,7 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <section ref={containerRef} className="relative h-screen flex flex-col items-center justify-center overflow-hidden bg-concrete-900">
+    <section ref={containerRef} className="relative h-screen flex flex-col items-center justify-center overflow-hidden bg-[var(--bg-main)] transition-colors duration-500">
       
       {/* 
         THE MONOLITH BACKGROUND (Central Logo Area)
@@ -31,11 +31,13 @@ const Hero: React.FC = () => {
         style={{ scale, opacity }}
       >
          {/* Base concrete texture */}
-         <div className="absolute inset-0 bg-concrete-900"></div>
+         <div className="absolute inset-0 bg-[var(--bg-main)]"></div>
          
          {/* The Logo Image Blended */}
          <div 
             className="absolute inset-0 bg-no-repeat opacity-80"
+            role="img"
+            aria-label="DIZAIN Agency Hero Background"
             style={{ 
                 backgroundImage: `url('https://drive.google.com/thumbnail?id=1DlZuPg-7SZUxT8Etv1BqRjk_8C-t1xCQ&sz=w1920')`,
                 backgroundSize: 'cover',
@@ -46,10 +48,10 @@ const Hero: React.FC = () => {
          ></div>
 
          {/* Stronger Dark Overlay for Text Readability */}
-         <div className="absolute inset-0 bg-gradient-to-b from-concrete-900/40 via-transparent to-concrete-900/90"></div>
+         <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-main)]/40 via-transparent to-[var(--bg-main)]/90"></div>
          
          {/* Noise Texture */}
-         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
+         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[var(--noise-opacity)] mix-blend-overlay"></div>
       </motion.div>
 
       <motion.div 
@@ -64,7 +66,7 @@ const Hero: React.FC = () => {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.8, duration: 0.8 }}
-            className="text-white text-lg md:text-3xl font-display font-bold tracking-[0.3em] uppercase text-center drop-shadow-2xl max-w-4xl px-4 leading-relaxed"
+            className="text-[var(--text-main)] text-lg md:text-3xl font-display font-bold tracking-[0.3em] uppercase text-center drop-shadow-2xl max-w-4xl px-4 leading-relaxed"
           >
             {t.hero.subtitle}
           </motion.h1>
@@ -78,11 +80,11 @@ const Hero: React.FC = () => {
             <a 
               href="#portfolio"
               onClick={handleScrollToWork}
-              className="group relative inline-flex items-center justify-center px-12 py-4 overflow-hidden font-display text-sm tracking-widest text-white transition-all duration-300 ease-out border border-white/40 bg-black/60 backdrop-blur-md hover:border-white hover:bg-white"
+              className="group relative inline-flex items-center justify-center px-12 py-4 overflow-hidden font-display text-sm tracking-widest text-[var(--text-main)] transition-all duration-300 ease-out border border-[var(--border-color)] bg-[var(--bg-main)]/60 backdrop-blur-md hover:border-[var(--text-main)] hover:bg-[var(--text-main)]"
             >
-              <span className="absolute flex items-center justify-center w-full h-full text-white transition-all duration-300 transform group-hover:translate-x-full ease">{t.hero.cta}</span>
+              <span className="absolute flex items-center justify-center w-full h-full text-[var(--text-main)] transition-all duration-300 transform group-hover:translate-x-full ease">{t.hero.cta}</span>
               <span className="relative invisible">{t.hero.cta}</span>
-              <span className="absolute inset-0 flex items-center justify-center w-full h-full text-black duration-300 -translate-x-full bg-white group-hover:translate-x-0 ease font-bold">
+              <span className="absolute inset-0 flex items-center justify-center w-full h-full text-[var(--bg-main)] duration-300 -translate-x-full bg-[var(--text-main)] group-hover:translate-x-0 ease font-bold">
                 {t.hero.cta}
               </span>
             </a>

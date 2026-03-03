@@ -1,8 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Sun, Moon } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface NavbarProps {
     currentView: string;
@@ -13,6 +14,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const { language, setLanguage, t } = useLanguage();
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -45,7 +47,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
     <nav
       className={`fixed top-0 w-full z-40 transition-all duration-500 border-b ${
         scrolled || currentView !== 'home'
-          ? 'bg-concrete-900/90 backdrop-blur-md border-white/10 py-4'
+          ? 'bg-[var(--bg-main)]/90 backdrop-blur-md border-[var(--border-color)] py-4'
           : 'bg-transparent border-transparent py-8'
       }`}
     >
@@ -66,9 +68,9 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
             <a 
                 href="#home" 
                 onClick={handleHomeClick}
-                className="border-[2px] border-white px-3 py-1.5 inline-block hover:bg-white group transition-colors duration-300"
+                className="border-[2px] border-[var(--text-main)] px-3 py-1.5 inline-block hover:bg-[var(--text-main)] group transition-colors duration-300"
             >
-                <span className="font-logo font-bold text-xl tracking-[0.2em] text-white group-hover:text-black transition-colors duration-300 block">
+                <span className="font-logo font-bold text-xl tracking-[0.2em] text-[var(--text-main)] group-hover:text-[var(--bg-main)] transition-colors duration-300 block">
                     DIZAIN
                 </span>
             </a>
@@ -85,7 +87,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
               href={`#${link.id}`}
               onClick={(e) => handleNavClick(e, link)}
               className={`text-[10px] md:text-xs uppercase tracking-[0.2em] transition-colors duration-300 font-bold ${
-                  currentView === link.id ? 'text-white' : 'text-neutral-400 hover:text-white'
+                  currentView === link.id ? 'text-[var(--text-main)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-main)]'
               }`}
             >
               {link.name}
@@ -96,19 +98,28 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
         {/* 
             RIGHT: Controls (Desktop Lang + Mobile Menu) 
         */}
-        <div className="justify-self-end flex items-center gap-4 z-50 ml-auto md:ml-0">
+        <div className="justify-self-end flex items-center gap-6 z-50 ml-auto md:ml-0">
+            {/* Theme Toggle */}
+            <button
+                onClick={toggleTheme}
+                className="text-[var(--text-secondary)] hover:text-[var(--text-main)] transition-colors"
+                aria-label="Toggle Theme"
+            >
+                {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+
             {/* Desktop Language Switcher */}
             <div className="hidden md:flex items-center gap-2">
                 <button 
                   onClick={() => setLanguage('sl')}
-                  className={`text-[10px] font-bold uppercase transition-colors tracking-widest ${language === 'sl' ? 'text-white' : 'text-neutral-600 hover:text-neutral-400'}`}
+                  className={`text-[10px] font-bold uppercase transition-colors tracking-widest ${language === 'sl' ? 'text-[var(--text-main)]' : 'text-[var(--text-muted)] hover:text-[var(--text-secondary)]'}`}
                 >
                   SLO
                 </button>
-                <span className="text-neutral-700 text-[10px]">/</span>
+                <span className="text-[var(--text-muted)] text-[10px]">/</span>
                 <button 
                   onClick={() => setLanguage('en')}
-                  className={`text-[10px] font-bold uppercase transition-colors tracking-widest ${language === 'en' ? 'text-white' : 'text-neutral-600 hover:text-neutral-400'}`}
+                  className={`text-[10px] font-bold uppercase transition-colors tracking-widest ${language === 'en' ? 'text-[var(--text-main)]' : 'text-[var(--text-muted)] hover:text-[var(--text-secondary)]'}`}
                 >
                   ENG
                 </button>
@@ -120,20 +131,20 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
                 <div className="flex items-center gap-2 mr-2">
                     <button 
                     onClick={() => setLanguage('sl')}
-                    className={`text-xs font-bold uppercase ${language === 'sl' ? 'text-white' : 'text-neutral-600'}`}
+                    className={`text-xs font-bold uppercase ${language === 'sl' ? 'text-[var(--text-main)]' : 'text-[var(--text-muted)]'}`}
                     >
                     SL
                     </button>
-                    <span className="text-neutral-700">/</span>
+                    <span className="text-[var(--text-muted)]">/</span>
                     <button 
                     onClick={() => setLanguage('en')}
-                    className={`text-xs font-bold uppercase ${language === 'en' ? 'text-white' : 'text-neutral-600'}`}
+                    className={`text-xs font-bold uppercase ${language === 'en' ? 'text-[var(--text-main)]' : 'text-[var(--text-muted)]'}`}
                     >
                     EN
                     </button>
                 </div>
                 <button
-                className="text-white"
+                className="text-[var(--text-main)]"
                 onClick={() => setMenuOpen(!menuOpen)}
                 >
                 {menuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -149,14 +160,14 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: '100%' }}
               transition={{ type: 'tween', duration: 0.4 }}
-              className="fixed inset-0 bg-concrete-900 flex flex-col items-center justify-center gap-8 md:hidden h-screen w-screen z-40"
+              className="fixed inset-0 bg-[var(--bg-main)] flex flex-col items-center justify-center gap-8 md:hidden h-screen w-screen z-40"
             >
               {navLinks.map((link) => (
                 <a
                   key={link.name}
                   href={`#${link.id}`}
                   onClick={(e) => handleNavClick(e, link)}
-                  className={`text-2xl font-display font-bold uppercase tracking-widest hover:text-neutral-400 ${currentView === link.id ? 'text-white' : 'text-neutral-500'}`}
+                  className={`text-2xl font-display font-bold uppercase tracking-widest hover:text-[var(--text-secondary)] ${currentView === link.id ? 'text-[var(--text-main)]' : 'text-[var(--text-muted)]'}`}
                 >
                   {link.name}
                 </a>
