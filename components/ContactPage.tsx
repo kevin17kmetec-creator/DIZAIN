@@ -89,12 +89,12 @@ const ContactPage: React.FC = () => {
                 
                 <div className="mb-12">
                     <h3 className="text-sm font-bold uppercase tracking-widest text-[var(--text-main)] mb-4">Lokacija</h3>
-                    <p className="text-[var(--text-secondary)]">Tehnološki Park 19<br/>1000 Ljubljana<br/>Slovenija</p>
+                    <p className="text-[var(--text-secondary)]">Karantanska ulica 28<br/>2000 Maribor<br/>Slovenija</p>
                 </div>
 
                 <div>
                     <h3 className="text-sm font-bold uppercase tracking-widest text-[var(--text-main)] mb-4">Kontakt</h3>
-                    <p className="text-[var(--text-secondary)]">hello@dizain.agency<br/>+386 1 234 5678</p>
+                    <p className="text-[var(--text-secondary)]">dizain.slo@gmail.com<br/>+386 70311260</p>
                 </div>
             </motion.div>
 

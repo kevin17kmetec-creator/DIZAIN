@@ -24,7 +24,7 @@ async function startServer() {
     try {
       const data = await resend.emails.send({
         from: 'onboarding@resend.dev', // Default sender for testing
-        to: 'kevin17kmetec@gmail.com',
+        to: 'dizain.slo@gmail.com',
         subject: `Novo sporočilo od ${name}`,
         html: `
           <p><strong>Ime:</strong> ${name}</p>

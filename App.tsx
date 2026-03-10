@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense, lazy } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Portfolio from './components/Portfolio';
@@ -9,14 +9,16 @@ import TechSpecs from './components/TechSpecs';
 import Contact from './components/Contact';
 import CustomCursor from './components/CustomCursor';
 import Footer from './components/Footer';
-import WorksPage from './components/WorksPage';
-import ServicesPage from './components/ServicesPage';
-import AgencyPage from './components/AgencyPage';
-import ContactPage from './components/ContactPage';
-import ProjectPreviewPage from './components/ProjectPreviewPage';
 import BackToTop from './components/BackToTop';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+// Lazy load non-home pages for performance optimization
+const WorksPage = lazy(() => import('./components/WorksPage'));
+const ServicesPage = lazy(() => import('./components/ServicesPage'));
+const AgencyPage = lazy(() => import('./components/AgencyPage'));
+const ContactPage = lazy(() => import('./components/ContactPage'));
+const ProjectPreviewPage = lazy(() => import('./components/ProjectPreviewPage'));
 
 type ViewState = 'home' | 'works' | 'services' | 'agency' | 'contact' | 'preview';
 
@@ -76,15 +78,35 @@ const AppContent: React.FC = () => {
   const renderView = () => {
       switch (view) {
           case 'preview':
-              return previewUrl ? <ProjectPreviewPage url={previewUrl} onBack={handleClosePreview} /> : null;
+              return previewUrl ? (
+                  <Suspense fallback={<div className="min-h-screen bg-[var(--bg-main)]" />}>
+                      <ProjectPreviewPage url={previewUrl} onBack={handleClosePreview} />
+                  </Suspense>
+              ) : null;
           case 'works':
-              return <WorksPage onPreview={handlePreview} />;
+              return (
+                  <Suspense fallback={<div className="min-h-screen bg-[var(--bg-main)]" />}>
+                      <WorksPage onPreview={handlePreview} />
+                  </Suspense>
+              );
           case 'services':
-              return <ServicesPage onNavigate={handleNavigate} />;
+              return (
+                  <Suspense fallback={<div className="min-h-screen bg-[var(--bg-main)]" />}>
+                      <ServicesPage onNavigate={handleNavigate} />
+                  </Suspense>
+              );
           case 'agency':
-              return <AgencyPage />;
+              return (
+                  <Suspense fallback={<div className="min-h-screen bg-[var(--bg-main)]" />}>
+                      <AgencyPage />
+                  </Suspense>
+              );
           case 'contact':
-              return <ContactPage />;
+              return (
+                  <Suspense fallback={<div className="min-h-screen bg-[var(--bg-main)]" />}>
+                      <ContactPage />
+                  </Suspense>
+              );
           case 'home':
           default:
               return (

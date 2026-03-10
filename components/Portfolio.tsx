@@ -87,6 +87,8 @@ const ProjectCard: React.FC<{ project: Project; index: number; onPreview?: (url:
                     src={project.image} 
                     alt={`${project.title} - ${project.category} project preview`} 
                     className={`w-full h-full ${project.imageClass || 'object-cover'} opacity-90 transition-all duration-700 hover:scale-105 hover:opacity-100`}
+                    loading="lazy"
+                    decoding="async"
                   />
               </div>
               

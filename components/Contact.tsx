@@ -99,11 +99,11 @@ const Contact: React.FC = () => {
                 </p>
 
                 <div className="flex flex-col gap-6">
-                     <a href="mailto:kevin17kmetec@gmail.com" className="group flex items-center gap-4 text-[var(--text-main)] hover:text-[var(--text-secondary)] transition-colors">
+                     <a href="mailto:dizain.slo@gmail.com" className="group flex items-center gap-4 text-[var(--text-main)] hover:text-[var(--text-secondary)] transition-colors">
                         <div className="w-12 h-12 rounded-full border border-[var(--border-color)] flex items-center justify-center group-hover:bg-[var(--text-main)] group-hover:text-[var(--bg-main)] transition-all">
                             <Mail size={20} />
                         </div>
-                        <span className="text-xl font-display">kevin17kmetec@gmail.com</span>
+                        <span className="text-xl font-display">dizain.slo@gmail.com</span>
                      </a>
                 </div>
             </motion.div>

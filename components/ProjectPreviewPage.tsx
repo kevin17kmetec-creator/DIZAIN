@@ -158,6 +158,7 @@ const ProjectPreviewPage: React.FC<ProjectPreviewPageProps> = ({ url, onBack }) 
         title="Project Live Preview"
         allowFullScreen
         sandbox="allow-scripts allow-same-origin allow-forms allow-pointer-lock allow-popups"
+        loading="lazy"
       />
     </div>
   );

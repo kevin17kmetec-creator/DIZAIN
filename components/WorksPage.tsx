@@ -83,6 +83,8 @@ const WorksPage: React.FC<WorksPageProps> = ({ onPreview }) => {
                                 src={project.image} 
                                 alt={`${project.title} - ${project.category} project preview`}
                                 className={`absolute inset-0 w-full h-full ${project.imageClass || 'object-cover'} transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100`}
+                                loading="lazy"
+                                decoding="async"
                             />
                             <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-300" />
                             
