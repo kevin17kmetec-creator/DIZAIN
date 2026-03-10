@@ -37,8 +37,8 @@ const Hero: React.FC = () => {
          <div 
             className="absolute inset-0 opacity-80"
             style={{
-                maskImage: 'radial-gradient(circle at center 35%, black 40%, transparent 85%)',
-                WebkitMaskImage: 'radial-gradient(circle at center 35%, black 40%, transparent 85%)'
+                maskImage: 'radial-gradient(circle at center 48%, black 45%, transparent 95%)',
+                WebkitMaskImage: 'radial-gradient(circle at center 48%, black 45%, transparent 95%)'
             }}
          >
              <div 
@@ -46,10 +46,10 @@ const Hero: React.FC = () => {
                 role="img"
                 aria-label="DIZAIN Agency Hero Background"
                 style={{ 
-                    backgroundImage: `url('https://wki1ffjfu2uulznl.public.blob.vercel-storage.com/DizainLogo_16_9.webp')`,
+                    backgroundImage: `url('https://wki1ffjfu2uulznl.public.blob.vercel-storage.com/DizainLogo_16_9.png')`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
-                    transform: 'scale(1.5) translateY(-12%)'
+                    transform: 'scale(1.15) translateY(10%)'
                 }}
              ></div>
          </div>
