@@ -46,7 +46,7 @@ const Hero: React.FC = () => {
                 role="img"
                 aria-label="DIZAIN Agency Hero Background"
                 style={{ 
-                    backgroundImage: `url('https://wki1ffjfu2uulznl.public.blob.vercel-storage.com/hf_20260310_102538_303433cb-9a29-4ffd-aab2-c972aaf192fa.png')`,
+                    backgroundImage: `url('https://wki1ffjfu2uulznl.public.blob.vercel-storage.com/DizainLogo_webp.webp')`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     transform: 'scale(1.0)'
