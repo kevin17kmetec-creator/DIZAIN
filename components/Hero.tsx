@@ -49,7 +49,7 @@ const Hero: React.FC = () => {
                     backgroundImage: `url('https://wki1ffjfu2uulznl.public.blob.vercel-storage.com/DizainLogo_16_9.png')`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
-                    transform: 'scale(1.6) translateY(-6%)'
+                    transform: 'scale(1.0) translateY(-6%)'
                 }}
              ></div>
          </div>
