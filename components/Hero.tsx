@@ -13,7 +13,7 @@ const Hero: React.FC = () => {
 
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "40%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.01]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.02]);
 
   const handleScrollToWork = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -35,17 +35,24 @@ const Hero: React.FC = () => {
          
          {/* The Logo Image Blended */}
          <div 
-            className="absolute inset-0 bg-no-repeat opacity-80"
-            role="img"
-            aria-label="DIZAIN Agency Hero Background"
-            style={{ 
-                backgroundImage: `url('https://wki1ffjfu2uulznl.public.blob.vercel-storage.com/DIZAIN.webp')`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center 65%',
-                maskImage: 'radial-gradient(circle at center, black 50%, transparent 95%)',
-                WebkitMaskImage: 'radial-gradient(circle at center, black 50%, transparent 95%)'
+            className="absolute inset-0 opacity-80"
+            style={{
+                maskImage: 'radial-gradient(circle at center 35%, black 40%, transparent 85%)',
+                WebkitMaskImage: 'radial-gradient(circle at center 35%, black 40%, transparent 85%)'
             }}
-         ></div>
+         >
+             <div 
+                className="absolute inset-0 bg-no-repeat w-full h-full"
+                role="img"
+                aria-label="DIZAIN Agency Hero Background"
+                style={{ 
+                    backgroundImage: `url('https://wki1ffjfu2uulznl.public.blob.vercel-storage.com/DizainLogo_16_9.webp')`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    transform: 'scale(1.5) translateY(-12%)'
+                }}
+             ></div>
+         </div>
 
          {/* Stronger Dark Overlay for Text Readability */}
          <div className="absolute inset-0 bg-gradient-to-b from-[var(--bg-main)]/40 via-transparent to-[var(--bg-main)]/90"></div>
