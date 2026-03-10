@@ -72,7 +72,7 @@ const ProjectCard: React.FC<{ project: Project; index: number; onPreview?: (url:
   return (
     <div 
       ref={containerRef}
-      className={`flex flex-col ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'} gap-12 items-center w-full`}
+      className={`relative flex flex-col ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'} gap-12 items-center w-full`}
     >
         {/* Image & Number Container */}
         <div className="w-full md:w-2/3 relative">

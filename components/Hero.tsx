@@ -69,14 +69,16 @@ const Hero: React.FC = () => {
         {/* Main Content - Pushed to absolute bottom 12 (approx 3rem/48px) with no extra padding */}
         <div className="absolute bottom-8 left-0 right-0 flex flex-col items-center justify-end z-30 pb-0">
           
-          <motion.h1 
+          <h1 className="sr-only">DIZAIN - Izdelava spletnih strani, spletnih trgovin in digitalna agencija</h1>
+
+          <motion.h2 
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.8, duration: 0.8 }}
             className="text-[var(--text-main)] text-lg md:text-3xl font-display font-bold tracking-[0.3em] uppercase text-center drop-shadow-2xl max-w-4xl px-4 leading-relaxed"
           >
             {t.hero.subtitle}
-          </motion.h1>
+          </motion.h2>
 
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
