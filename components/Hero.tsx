@@ -13,7 +13,7 @@ const Hero: React.FC = () => {
 
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "40%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.05]);
 
   const handleScrollToWork = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -39,11 +39,11 @@ const Hero: React.FC = () => {
             role="img"
             aria-label="DIZAIN Agency Hero Background"
             style={{ 
-                backgroundImage: `url('https://drive.google.com/thumbnail?id=1DlZuPg-7SZUxT8Etv1BqRjk_8C-t1xCQ&sz=w1920')`,
+                backgroundImage: `url('https://lh3.googleusercontent.com/d/1DlZuPg-7SZUxT8Etv1BqRjk_8C-t1xCQ=w2560')`,
                 backgroundSize: 'cover',
-                backgroundPosition: 'center 60%',
-                maskImage: 'radial-gradient(circle at center, black 40%, transparent 90%)',
-                WebkitMaskImage: 'radial-gradient(circle at center, black 40%, transparent 90%)'
+                backgroundPosition: 'center 35%',
+                maskImage: 'radial-gradient(circle at center, black 50%, transparent 95%)',
+                WebkitMaskImage: 'radial-gradient(circle at center, black 50%, transparent 95%)'
             }}
          ></div>
 
