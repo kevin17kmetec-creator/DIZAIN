@@ -49,7 +49,7 @@ const Hero: React.FC = () => {
                     backgroundImage: `url('https://wki1ffjfu2uulznl.public.blob.vercel-storage.com/hf_20260310_102538_303433cb-9a29-4ffd-aab2-c972aaf192fa.png')`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
-                    transform: 'scale(1.0) translateY(-4%)'
+                    transform: 'scale(1.0)'
                 }}
              ></div>
          </div>
@@ -67,7 +67,7 @@ const Hero: React.FC = () => {
       >
         
         {/* Main Content - Pushed to absolute bottom 12 (approx 3rem/48px) with no extra padding */}
-        <div className="absolute bottom-12 left-0 right-0 flex flex-col items-center justify-end z-30 pb-0">
+        <div className="absolute bottom-8 left-0 right-0 flex flex-col items-center justify-end z-30 pb-0">
           
           <motion.h1 
             initial={{ y: 20, opacity: 0 }}
